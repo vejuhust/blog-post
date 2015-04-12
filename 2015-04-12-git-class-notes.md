@@ -363,32 +363,38 @@ git push
 
 
 
-==================
-Rebase
+# Rebase
 
-# 缓存本地独有修改，重现远程修改，在缓存区重现所有修改
-git rebase
+**Info**: `git rebase`会先缓存本地独有修改，重现远程修改，再重现缓存区的所有修改
+{: .notice}
 
-# Local branch rebase
+对本地分支进行rebase:
+{% highlight bash %}
 git checkout admin
 git rebase master
 git checkout master
 git merge admin
+{% endhighlight %}
 
-# Conflicts
+处理rebase冲突:
+{% highlight bash %}
 git rebase --continue
 git rebase --skip
 git rebase --abort
+{% endhighlight %}
 
+交互式rebase:
+{% highlight bash %}
+git rebase -i HEAD~3    # rebase当前HEAD前的最近三个commit
+{% endhighlight %}
 
-
-
-
-
-
-
-
-
+* rebase按行执行，修改行的顺序可以改变rebase顺序
+* `p, pick` - 选择此commit
+* `r, reword` - 选择并修改commit说明
+* `e, edit` - 选择并通过amend方式修改commit
+* `s, squash` - 与上一行commit合并
+* `f, fixup` - 类似squash，但不保留该commit的message
+* `x, exec` - 用shell执行此行剩余部分的命令
 
 
 
@@ -432,34 +438,6 @@ git blame index.html --date short
 # 查看reflog
 git reflog
 
-==================
-==================
-Rebase
-
-# 缓存本地独有修改，重现远程修改，重现缓存区的所有修改
-git rebase
-
-# Local branch rebase
-git checkout admin
-git rebase master
-git checkout master
-git merge admin
-
-# Resolve conflicts
-git fetch
-git rebase --continue
-git rebase --skip
-git rebase --abort
-
-# Interactive rebase
-git rebase -i HEAD~3    # rebase当前HEAD之前三个commit至今
-* rebase按行执行，修改行的顺序可以改变rebase顺序
-* p, pick - 选择此commit
-* r, reword - 选择并修改commit说明
-* e, edit - 选择并通过amend方式修改commit
-* s, squash - 与上一行commit合并
-* f, fixup - 类似squash，但不保留该commit的message
-* x, exec = run command (the rest of the line) using shell
 
 
 ==================
