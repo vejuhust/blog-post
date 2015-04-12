@@ -164,26 +164,33 @@ git clean -xnd  # 删除untracked及被ignored的文件、目录
 
 
 
-==================
-Undo
+# Undo
 
-# 不要尝试撤销/修改已经push的commit
+**Warning**: 不要尝试撤销/修改已经push的commit。
+{: .notice}
 
-# 撤销文件级修改
+撤销文件级修改:
+{% highlight bash %}
 git reset readme.md         # 与 git reset HEAD readme.md 相同
 git reset HEAD readme.md    # 取消staged状态，即Unstage
 git checkout -- readme.md   # 撤销单个文件的当前修改，"--"用于区分文件和branch，不可省
+{% endhighlight %}
 
-# 撤销commit级修改
+撤销commit级修改:
+{% highlight bash %}
 git reset HEAD              # 撤销当前所有staged操作
 git reset --hard HEAD       # 撤销当前所有staged操作，并还原文件
 git reset --soft HEAD^      # 撤销上一次commit，并将文件置于staging状态
 git reset --hard HEAD^      # 撤销上一次commit，并还原文件
 git reset --hard HEAD^^     # 撤销前两次commit，并还原文件
+{% endhighlight %}
 
-# commit补刀方法
+commit后补上文件:
+{% highlight bash %}
 git add todo.txt
 git commit --amend -m "Modify readme.md & add todo.txt"
+{% endhighlight %}
+
 
 
 ==================
