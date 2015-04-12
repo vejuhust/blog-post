@@ -198,6 +198,7 @@ git commit --amend -m "Modify readme.md & add todo.txt"
 查看当前所有分支:
 {% highlight bash %}
 git branch      # 本地
+git branch -r   # 远程
 git branch -a   # 本地及远程
 {% endhighlight %}
 
@@ -257,51 +258,78 @@ git push --tags
 
 
 
-==================
-Publish
+# Publish
 
-# 从本地添加远程repo
+从本地添加远程仓库:
+{% highlight bash %}
 git remote add origin git@github.com:vejuhust/learn-git.git
+{% endhighlight %}
 
-# 从本地移除远程repo
+从本地移除远程仓库:
+{% highlight bash %}
 git remote rm origin
+{% endhighlight %}
 
-# 查看远程repo
+查看远程仓库:
+{% highlight bash %}
 git remote -v
+{% endhighlight %}
 
-# push到远程repo
+push到远程仓库:
+{% highlight bash %}
 git push -u origin master   # -u将其设为默认，下次仅需git push
+{% endhighlight %}
 
-# 将本地staging分支push到bingint上的master分支
+将本地staging分支push到bingint上的master分支:
+{% highlight bash %}
 git push bingint staging:master
+{% endhighlight %}
 
-# 从远程repo下载更新
+从远程仓库下载更新:
+{% highlight bash %}
 git fetch
+{% endhighlight %}
 
-# 从远程repo进行pull - git fetch & git merge origin/master
+从远程仓库进行pull:
+{% highlight bash %}
 git pull
 git push --rebase   # 避免无意义的merge commit
+{% endhighlight %}
 
-# git clone - download repo & git remote add origin & check out initial branch
+**Info**: `git pull`等价于`git fetch && git merge origin/master`。
+{: .notice}
+
+克隆远程仓库:
+{% highlight bash %}
 git clone git@github.com:vejuhust/learn-git.git
 git clone git@github.com:vejuhust/learn-git.git demo
+{% endhighlight %}
 
-# 创建远程repo
+**Info**: `git clone`等价于下载仓库，然后`git remote add origin`，最后check out主分支。
+{: .notice}
+
+创建远程仓库:
+{% highlight bash %}
 git checkout -b cart
 git push origin cart
+{% endhighlight %}
 
-# 删除远程repo
+删除远程仓库:
+{% highlight bash %}
 git push origin :cart
 git branch -d cart
+{% endhighlight %}
 
-# 本地清理已删除的远程repo
+本地清理已删除的远程仓库:
+{% highlight bash %}
 git remote prune origin
+{% endhighlight %}
 
-# 列出所有的远程branch
-git branch -r
-
-# 对比本地和远程branch状态
+对比本地和远程分支状态:
+{% highlight bash %}
 git remote show origin
+{% endhighlight %}
+
 
 
 ==================
