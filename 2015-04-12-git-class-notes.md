@@ -518,41 +518,46 @@ git branch aviary HEAD@{1}
 
 
 
-==================
-Stashing
+# Stashing
 
-# 暂存当前修改，并恢复到上一次commit内容
+暂存当前修改，并恢复到上一次commit内容:
+{% highlight bash %}
 git stash                           # 与 git stash save 相同
 git stash save
 git stash save "hotfix"             # 添加message信息
 git stash save --keep-index         # 仅stash处于unstaged状态的修改
 git stash save --include-untracked  # 包含untracked的文件
+{% endhighlight %}
 
-# 查看被stash的内容
+查看被stash的内容:
+{% highlight bash %}
 git stash list              # 查看所有stash
 git stash list --stat       # 查看所有stash的文件状态，接受类 git log 的参数
 git stash show              # 与 git stash show stash@{0} 相同
 git stash show stash@{0}    # 查看指定的stash，接受类 git log 的参数
+{% endhighlight %}
 
-# 恢复被stash的内容
+恢复被stash的内容:
+{% highlight bash %}
 git stash apply                 # 与 git stash apply stash@{0} 相同
 git stash apply stash@{0}       # 恢复到指定的stash
 git stash branch dev stash@{0}  # 创建新的branch，并pop到此
+{% endhighlight %}
 
-# 删除stash
+删除stash:
+{% highlight bash %}
 git stash drop              # 与 git stash drop stash@{0} 相同
 git stash drop stash@{0}    # 删除指定的stash
 git stash clear             # 删除全部stash
+{% endhighlight %}
 
-# 恢复并删除被stash的内容，若apply遇到冲突则不会drop
+恢复并删除被stash的内容，若apply遇到冲突则不会drop:
+{% highlight bash %}
 git stash pop               # 与 git stash apply & git stash drop 相同
+{% endhighlight %}
 
-# 若出现冲突，先commit或reset，再apply
-
-
-
-
-
+**Advice**: 若出现冲突，可以先`git commit`或`reset`，再`apply`。
+{: .notice}
 
 
 
