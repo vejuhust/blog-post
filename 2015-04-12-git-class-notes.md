@@ -561,28 +561,6 @@ git stash pop               # 与 git stash apply & git stash drop 相同
 
 
 
-==================
-Team work
-
-vim .gitattributes
-*       text=auto
-*.html  text
-*.css   text
-*.bat   text eol=crlf
-*.sh    text eol=lf
-*.jpg   binary
-*.png   binary
-
-
-# 从其他branch复制commit
-git cherry-pick 123abc
-git cherry-pick -x 123abc                   # 在message中添加来源commit的SHA信息
-git cherry-pick --signoff 123abc            # 在message中添加进行操作人员的信息
-git cherry-pick --edit 123abc               # 修改message
-git cherry-pick --no-commit 123abc 456def   # 一次多个commit，需要自行commit
-
-
-
 # Submodule
 
 在仓库中添加submodule:
@@ -618,4 +596,30 @@ git pull
 git submodule update
 {% endhighlight %}
 
+
+
+# Teamwork Features
+
+## .gitattributes
+通过属性，可以对个别文件或目录定义不同的合并策略:
+{% highlight bash linenos %}
+*       text=auto
+*.html  text
+*.css   text
+*.bat   text eol=crlf
+*.sh    text eol=lf
+*.jpg   binary
+*.png   binary
+{% endhighlight %}
+
+
+## git cherry-pick
+从其他分支复制commit:
+{% highlight bash %}
+git cherry-pick 123abc
+git cherry-pick -x 123abc                   # 在message中添加来源commit的SHA信息
+git cherry-pick --signoff 123abc            # 在message中添加进行操作人员的信息
+git cherry-pick --edit 123abc               # 修改message
+git cherry-pick --no-commit 123abc 456def   # 一次多个commit，需要自行commit
+{% endhighlight %}
 
