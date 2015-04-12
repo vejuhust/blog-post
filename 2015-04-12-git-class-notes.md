@@ -498,6 +498,25 @@ git filter-branch --index-filter 'git rm --cached --ignore-unmatch passwords.txt
 {% endhighlight %}
 
 
+## Reflog
+
+查看本地reflog:
+{% highlight bash %}
+git reflog
+git log --walk-reflogs  # 显示细节
+{% endhighlight %}
+
+恢复到指定误删commit:
+{% highlight bash %}
+git reset --hard HEAD@{1}
+{% endhighlight %}
+
+恢复指定误删commit到新分支:
+{% highlight bash %}
+git branch aviary HEAD@{1}
+{% endhighlight %}
+
+
 
 ==================
 Stashing
@@ -593,16 +612,5 @@ git submodule update
 
 
 ==================
-Reflog
-
-# 查看本地reflog
-git reflog
-git log --walk-reflogs  # 显示细节
-
-# 恢复到指定误删commit
-git reset --hard HEAD@{1}
-
-# 恢复指定误删commit到新branch
-git branch aviary HEAD@{1}
 
 
