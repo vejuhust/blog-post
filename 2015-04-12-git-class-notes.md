@@ -332,30 +332,35 @@ git remote show origin
 
 
 
-==================
-Merge
+# Merge
 
-# Recursive merge, not fast-forward
+递归合并(recursive)，禁用fast-forward策略:
+{% highlight bash %}
 git merge --no-ff dog
+{% endhighlight %}
 
-# 将cat branch合并入master
+将cat分支合并入master:
+{% highlight bash %}
 git checkout master
 git merge cat
+{% endhighlight %}
 
-# 可以merge指定commit
+合并指定commit:
+{% highlight bash %}
 git merge 123abc
+{% endhighlight %}
 
-# 多人协作时先同步代码再发布
-git pull
-git push
+**Advice**: 多人协作时，应当先同步代码再发布，即，先`git pull`再`git push`。
+{: .notice}
 
-# 出现冲突时需要编辑冲突部分
+出现冲突时需要编辑冲突部分:
+{% highlight bash %}
 git pull
 git mergetool
 git commit -a
 git push
+{% endhighlight %}
 
-# git status -- unmerged
 
 
 ==================
