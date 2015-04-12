@@ -128,6 +128,7 @@ git diff            # 查看自上次commit以来unstaged的修改
 git diff --staged   # 查看staged的修改
 {% endhighlight %}
 
+
 ## Ignore Files
 隐式忽略特定文件:
 {% highlight bash %}
@@ -400,6 +401,8 @@ git rebase -i HEAD~3    # rebase当前HEAD前的最近三个commit
 
 # History
 
+## Check History
+
 查看指定文件的历史:
 {% highlight bash %}
 git log --follow README.md
@@ -441,7 +444,7 @@ git diff 123456..abcdefg    # 比对出123456到abcdefg之间所进行的全部�
 git diff master admin       # 对比不同branch
 {% endhighlight %}
 
-显示每一行的最后修改者:
+显示每一行的最后修改情况:
 {% highlight bash %}
 git blame index.html --date short
 {% endhighlight %}
@@ -449,6 +452,49 @@ git blame index.html --date short
 查看reflog:
 {% highlight bash %}
 git reflog
+{% endhighlight %}
+
+
+## Purge Histroy
+
+可以通过清理记录来移除不想公开的部分，主要适用情况——
+
+* 版权纠纷
+* 体积过大的二进制文件
+* 修改为尚未公开的commit
+
+**Advice**: 操作之前先进行本地备份，例如`git clone learn learn-backup`。
+{: .notice}
+
+借助`git filter-branch`按commit逐条执行command，若中途command执行失败则停止:
+{% highlight bash %}
+# 按commit逐条执行command，然后重新commit
+git filter-branch --tree-filter <command>
+
+# 删除repo根目录下的passwords.txt
+git filter-branch --tree-filter 'rm -fr passwords.txt'
+
+# 删除所有目录中的.mp4
+git filter-branch --tree-filter 'find . -name "*.mp4" -exec rm {} \;'
+
+# 删除所有branch的repo根目录下的passwords.txt
+git filter-branch --tree-filter 'rm -fr passwords.txt' -- --all
+
+# 删除当前branch的repo根目录下的passwords.txt
+git filter-branch --tree-filter 'rm -fr passwords.txt' -- HEAD
+
+# 按commit逐条在staging上执行command，避免重新commit
+git filter-branch --index-filter <command>
+
+# 停止追踪repo根目录下的passwords.txt
+git filter-branch --index-filter 'git rm --cached --ignore-unmatch passwords.txt'
+
+# 强制第二次执行 git filter-branch 命令
+git filter-branch -f --index-filter <command>
+
+# 删去因为清洗而变空的commit
+git filter-branch -f --prune-empty -- --all
+git filter-branch --index-filter 'git rm --cached --ignore-unmatch passwords.txt' --prune-empty -- --all
 {% endhighlight %}
 
 
@@ -487,32 +533,6 @@ git stash pop               # 与 git stash apply & git stash drop 相同
 
 
 
-==================
-Purge Histroy
-
-# 清理记录中不想公开的部分
-
-# 主要适用情况——
-* 版权纠纷
-* 体积过大的二进制文件
-* 修改为尚未公开的commit
-
-# 先备份
-git clone learn-git learn-git-filter
-cd learn-git-filter
-
-# 清洗历史 - 按commit逐条执行command，若中途command执行失败则停止
-git filter-branch --tree-filter <command>               # 按commit逐条执行command，然后重新commit
-git filter-branch --tree-filter 'rm -fr passwords.txt'  # 删除repo根目录下的passwords.txt
-git filter-branch --tree-filter 'find . -name "*.mp4" -exec rm {} \;'   # 删除所有目录中的.mp4
-git filter-branch --tree-filter 'rm -fr passwords.txt' -- --all     # 删除所有branch的repo根目录下的passwords.txt
-git filter-branch --tree-filter 'rm -fr passwords.txt' -- HEAD      # 删除当前branch的repo根目录下的passwords.txt
-
-git filter-branch --index-filter <command>              # 按commit逐条在staging上执行command，避免重新commit
-git filter-branch --index-filter 'git rm --cached --ignore-unmatch passwords.txt'   # 停止追踪repo根目录下的passwords.txt
-git filter-branch -f --index-filter <command>           # 强制第二次执行 git filter-branch 命令
-git filter-branch -f --prune-empty -- --all             # 删去因为清洗而变空的commit
-git filter-branch --index-filter 'git rm --cached --ignore-unmatch passwords.txt' --prune-empty -- --all 
 
 
 
