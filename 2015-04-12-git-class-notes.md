@@ -83,55 +83,85 @@ git st
 其他方面和环境参数一致。
 
 
-==================
-Basic
 
-# 获取帮助
+# Basic Operation
+
+## Get Started
+获取帮助:
+{% highlight bash %}
 git help
 git help config
+{% endhighlight %}
 
-# 初始化本地repo
+初始化本地仓库:
+{% highlight bash %}
 git init
+{% endhighlight %}
 
-# 查看文件状态
+查看文件状态:
+{% highlight bash %}
 git status
+{% endhighlight %}
 
-# 添加修改
+添加修改:
+{% highlight bash %}
 git add README.md
 git add --update    # 添加全部tracked状态的文件
 git add --all       # 添加全部文件
 git add .           # 添加当前目录
 git add *.txt       # 添加当前目录中全部txt文件
 git add '*.txt'     # 添加当前及子目录中全部txt文件
+{% endhighlight %}
 
-# 提交修改(文字用一般现在时)
+提交修改:
+{% highlight bash %}
 git commit -m "Add README.md"
 git commit -a -m "Modify readme.md" # Add changes from all tracked files
+{% endhighlight %}
 
-# 查看当前修改
+**Advice**: commit message 文字应使用一般现在时。
+{: .notice}
+
+查看当前修改:
+{% highlight bash %}
 git diff            # 查看自上次commit以来unstaged的修改
 git diff --staged   # 查看staged的修改
+{% endhighlight %}
 
-# 隐式忽略
+## Ignore Files
+隐式忽略特定文件:
+{% highlight bash %}
 vim .git/info/exclude
+{% endhighlight %}
 
-# 显式忽略
+显式忽略特定文件:
+{% highlight bash %}
 vim .gitignore
+{% endhighlight %}
 
-# 列出所有被忽略的文件
+列出所有被忽略的文件:
+{% highlight bash %}
 git ls-files --other --ignored --exclude-standard
+{% endhighlight %}
 
-# 删除并停止追踪
+删除并停止追踪:
+{% highlight bash %}
 git rm README.txt
+{% endhighlight %}
 
-# 仅停止追踪
+仅停止追踪:
+{% highlight bash %}
 git rm --cached file.log
+{% endhighlight %}
 
-# 清理本地untracked的文件
+清理本地未被追踪的文件:
+{% highlight bash %}
 git clean -nd   # 仅列出将删除的文件、目录
 git clean -fd   # 强制删除
 git clean -Xnd  # 仅删除被ignored的文件、目录
 git clean -xnd  # 删除untracked及被ignored的文件、目录
+{% endhighlight %}
+
 
 
 ==================
