@@ -7,42 +7,58 @@ tags: [git, tool]
 comments: true
 ---
 
-==================
-Config
+{% include _toc.html %}
 
-# 基本配置
+# Configuration
+
+## Environment
+添加基本配置:
+{% highlight bash %}
 git config --global user.name "Wei Ye"
 git config --global user.email "vejuhust@gmail.com"
 git config --global color.ui auto
 git config --global color.ui true
+{% endhighlight %}
 
-# 高级配置
+添加高级配置:
+{% highlight bash %}
 git config --global core.editor vim
 git config --global core.autocrlf input     # Mac/Linux
 #git config --global core.autocrlf true     # Windows
 #git config --global core.autocrlf false    # if use Windows only
 git config --global help.autocorrect 1
-git config --global merge.tool vimdiff  # Linux
-#git config --global merge.tool opendiff # Mac
+git config --global merge.tool vimdiff
 git config --global push.default simple
 git config --global pull.rebase true
 git config --global rerere.enabled true
+{% endhighlight %}
 
-# 取消配置
+删除配置:
+{% highlight bash %}
 git config --local --unset core.autocrlf input
 git config --global --unset help.autocorrect 1
+{% endhighlight %}
 
-# 查看所有配置
+查看配置:
+{% highlight bash %}
 git config --global --list
+{% endhighlight %}
 
-# 修改所有配置
+批量修改配置:
+{% highlight bash %}
 git config --global --edit
-* System: vim /etc/gitconfig
-* User: vim ~/.gitconfig
-* Repository: vim .git/config
+{% endhighlight %}
+
+亦可直接修改配置文件:
+
+* System: `vim /etc/gitconfig`
+* User: `vim ~/.gitconfig`
+* Repository: `vim .git/config`
 
 
-# 创建alias
+## Aliases
+添加别名:
+{% highlight bash %}
 git config --global alias.la        "log --pretty=format:'%h %ad - [%an] %s' --graph"
 git config --global alias.lg        "log --graph --decorate --pretty=oneline --abbrev-commit --all"
 git config --global alias.s         "status -s"
@@ -56,11 +72,15 @@ git config --global alias.cia       "commit -a"
 git config --global alias.d         "diff"
 git config --global alias.ds        "diff --staged"
 git config --global alias.pushall   "push --recurse-submodules=on-demand"
+{% endhighlight %}
 
-
-# 使用alias
+使用别名:
+{% highlight bash %}
 git la
 git st
+{% endhighlight %}
+
+其他方面和环境参数一致。
 
 
 ==================
