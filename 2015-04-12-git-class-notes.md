@@ -119,7 +119,7 @@ git commit -m "Add README.md"
 git commit -a -m "Modify readme.md" # Add changes from all tracked files
 {% endhighlight %}
 
-**Advice**: commit message 文字应使用一般现在时。
+:star2: **Advice**: commit message 文字应使用一般现在时。
 {: .notice}
 
 查看当前修改:
@@ -167,7 +167,7 @@ git clean -xnd  # 删除untracked及被ignored的文件、目录
 
 # Undo
 
-**Warning**: 不要尝试撤销/修改已经push的commit。
+:warning: **Warning**: 不要尝试撤销/修改已经push的commit。
 {: .notice}
 
 撤销文件级修改:
@@ -297,7 +297,7 @@ git pull
 git push --rebase   # 避免无意义的merge commit
 {% endhighlight %}
 
-**Info**: `git pull`等价于`git fetch && git merge origin/master`。
+:clipboard: **Info**: `git pull`等价于`git fetch && git merge origin/master`。
 {: .notice}
 
 克隆远程仓库:
@@ -306,7 +306,7 @@ git clone git@github.com:vejuhust/learn-git.git
 git clone git@github.com:vejuhust/learn-git.git demo
 {% endhighlight %}
 
-**Info**: `git clone`等价于下载仓库，然后`git remote add origin`，最后check out主分支。
+:clipboard: **Info**: `git clone`等价于下载仓库，然后`git remote add origin`，最后check out主分支。
 {: .notice}
 
 创建远程仓库:
@@ -351,7 +351,7 @@ git merge cat
 git merge 123abc
 {% endhighlight %}
 
-**Advice**: 多人协作时，应当先同步代码再发布，即，先`git pull`再`git push`。
+:star2: **Advice**: 多人协作时，应当先同步代码再发布，即，先`git pull`再`git push`。
 {: .notice}
 
 出现冲突时需要编辑冲突部分:
@@ -366,7 +366,7 @@ git push
 
 # Rebase
 
-**Info**: `git rebase`会先缓存本地独有修改，重现远程修改，再重现缓存区的所有修改
+:clipboard: **Info**: `git rebase`会先缓存本地独有修改，重现远程修改，再重现缓存区的所有修改
 {: .notice}
 
 对本地分支进行rebase:
@@ -463,7 +463,7 @@ git reflog
 * 体积过大的二进制文件
 * 修改为尚未公开的commit
 
-**Advice**: 操作之前先进行本地备份，例如`git clone learn learn-backup`。
+:star2: **Advice**: 操作之前先进行本地备份，例如`git clone learn learn-backup`。
 {: .notice}
 
 借助`git filter-branch`按commit逐条执行command，若中途command执行失败则停止:
@@ -556,7 +556,7 @@ git stash clear             # 删除全部stash
 git stash pop               # 与 git stash apply & git stash drop 相同
 {% endhighlight %}
 
-**Advice**: 若出现冲突，可以先`git commit`或`reset`，再`apply`。
+:star2: **Advice**: 若出现冲突，可以先`git commit`或`reset`，再`apply`。
 {: .notice}
 
 
