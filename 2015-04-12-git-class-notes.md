@@ -9,6 +9,12 @@ comments: true
 
 {% include _toc.html %}
 
+使用Git也有一段时间了，但一直没有系统的学习过。随着使用频率的增加，觉得还是这还是有必要的。于是趁着春节假期，在CodeSchool[^1]上把Git Path [^2]的四门课学完了。边学边练边记，最后总结成此文。
+
+[^1]: <https://www.codeschool.com/>
+[^2]: <https://www.codeschool.com/paths/git>
+
+
 # Configuration
 
 ## Environment
