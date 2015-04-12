@@ -1,3 +1,11 @@
+---
+layout: post
+title: Git Class Notes
+excerpt: "Notes of getting started with Git based on CodeSchool courses"
+modified: 2015-04-12
+tags: [git, tool]
+comments: true
+---
 
 ==================
 Config
