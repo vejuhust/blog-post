@@ -398,13 +398,15 @@ git rebase -i HEAD~3    # rebase当前HEAD前的最近三个commit
 
 
 
-==================
-History
+# History
 
-# 查看指定文件的历史
+查看指定文件的历史:
+{% highlight bash %}
 git log --follow README.md
+{% endhighlight %}
 
-# 优化历史输出格式
+优化历史输出格式:
+{% highlight bash %}
 git log --pretty=format:"%h %ad - %s [%an]" # 自定义输出格式
 git log --pretty=oneline    # 每个commit输出为一行
 git log --oneline           # 每个commit输出为一行，SHA1缩减为前6个字符
@@ -412,18 +414,24 @@ git log --patch             # patch风格输出
 git log --oneline -p        # 简约的patch风格输出
 git log --oneline --stat    # 显示文件变化状况
 git log --oneline --graph   # 字符图形化显示，突显branch变化
+{% endhighlight %}
 
-# 只查看一段时间内的记录
+只查看一段时间内的记录:
+{% highlight bash %}
 git log --until=1.minute.ago
 git log --since=1.hour.ago
 git log --since=1.month.ago --until=2.weeks.ago
 git log --since=2013-07-15 --until=2015-01-15
+{% endhighlight %}
 
-# 查看指定commit
+查看指定commit:
+{% highlight bash %}
 git log --patch --max-count=1 5f216e3
 git show 5f216e3
+{% endhighlight %}
 
-# 查看具体到行的修改
+查看具体到行的修改:
+{% highlight bash %}
 git diff                    # 与 git diff HEAD 相同
 git diff HEAD               # 上次commit后出现的修改
 git diff HEAD^              # 对比上上次commit后至今的修改
@@ -431,12 +439,17 @@ git diff HEAD~5             # 对比5次之前commit后至今的修改
 git diff HEAD^..HEAD        # 比对出上次commit所进行的修改
 git diff 123456..abcdefg    # 比对出123456到abcdefg之间所进行的全部修改
 git diff master admin       # 对比不同branch
+{% endhighlight %}
 
-# 显示每一行的最后修改者
+显示每一行的最后修改者:
+{% highlight bash %}
 git blame index.html --date short
+{% endhighlight %}
 
-# 查看reflog
+查看reflog:
+{% highlight bash %}
 git reflog
+{% endhighlight %}
 
 
 
