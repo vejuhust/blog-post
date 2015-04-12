@@ -193,44 +193,68 @@ git commit --amend -m "Modify readme.md & add todo.txt"
 
 
 
-==================
-Branch
+# Branch
 
-# 查看当前branch
-git branch
+查看当前所有分支:
+{% highlight bash %}
+git branch      # 本地
+git branch -a   # 本地及远程
+{% endhighlight %}
 
-# 创建新branch
+创建新分支:
+{% highlight bash %}
 git branch cat
-git branch dog 123abc   # 创建新branch并添加指定commit
+git branch dog 123abc   # 创建新分支并添加指定commit
+{% endhighlight %}
 
-# 切换branch
+切换分支:
+{% highlight bash %}
 git checkout cat
 git checkout master
+{% endhighlight %}
 
-# 创建并切换到新branch
+创建并切换到新分支:
+{% highlight bash %}
 git checkout -b dog
+{% endhighlight %}
 
-# 删除branch
+删除分支:
+{% highlight bash %}
 git branch -d cat   # 要求改动被merged
 git branch -D cart  # 强制删除
+{% endhighlight %}
 
 
-# 列出所有的tag
+
+# Tag
+
+列出所有的tag:
+{% highlight bash %}
 git tag
 git tag -l -n10     # 并显示最多10行的comment
+{% endhighlight %}
 
-# 回滚到指定tag (kinda like rollback)
+回滚到指定tag:
+{% highlight bash %}
 git checkout v0.0.1
+{% endhighlight %}
 
-# 将commit添加为tag (name & description)
+将commit添加为tag:
+{% highlight bash %}
 git tag -a v0.0.3 -m "version 0.0.3"            # 当前commit
 git tag -a v0.0.2 -m "version 0.0.2" 5f216e3    # 指定commit
+{% endhighlight %}
 
-# 删除commit
+删除tag:
+{% highlight bash %}
 git tag -d v0
+{% endhighlight %}
 
-# 发布新添加的tag
+发布tag:
+{% highlight bash %}
 git push --tags
+{% endhighlight %}
+
 
 
 ==================
