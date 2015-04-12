@@ -583,39 +583,39 @@ git cherry-pick --no-commit 123abc 456def   # 一次多个commit，需要自行c
 
 
 
-==================
-Submodules
+# Submodule
 
-# repo内包含其他repo
-
-# 在repo中添加submodule
+在仓库中添加submodule:
+{% highlight bash %}
 git submodule add git@github.com:vejuhust/shared.git
 git commit -m "Add shared submodule"
 git push
+{% endhighlight %}
 
-# 更新submodule
+更新submodule内的文件:
+{% highlight bash %}
 cd shared               # Step 1: 更新submodule本身
 git checkout master     # 此步不可缺少，因HEAD默认在no branch上
 git commit -a -m "Update shared."
 git push
-cd ..                   # Step 2: 更新所母repo
+cd ..                   # Step 2: 更新所母仓库
 git commit -a -m "Update shared."
 git push    
 git push --recurse-submodules=check     # 检查是否忘记push submodule
-git push --recurse-submodules=on-demand # 将repo和submodule均push
+git push --recurse-submodules=on-demand # 或者，将母仓库和submodule均push
+{% endhighlight %}
 
-# 对有submodule的repo进行clone
+对有submodule的仓库进行克隆:
+{% highlight bash %}
 git clone git@github.com:vejuhust/learn-git.git
 git submodule init
 git submodule update
+{% endhighlight %}
 
-# 对有submodule的repo进行pull
+对有submodule的仓库进行pull:
+{% highlight bash %}
 git pull
 git submodule update
-
-
-
-
-==================
+{% endhighlight %}
 
 
