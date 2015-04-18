@@ -1,6 +1,6 @@
 ---
 layout: post
-title: The World Is So Big and I Wanna See It
+title: The World Is so Big and I Wanna See It
 excerpt: "To leave, or not to leave, that isn't the question"
 modified: 2015-04-18
 tags: [life, career, microsoft, startup]
