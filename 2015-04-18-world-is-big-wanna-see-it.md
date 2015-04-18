@@ -1,3 +1,15 @@
+---
+layout: post
+title: The World Is So Big and I Wanna See It
+excerpt: "To leave, or not to leave, that isn't the question"
+modified: 2015-04-18
+tags: [life, career, microsoft, startup]
+comments: true
+image:
+  feature: feature/leipzig-windmill.jpg
+  credit: Wei Ye
+---
+
 
 最近网上流传着一封只有十个字却充满情怀的辞职信：
 世界那么大，我想去看看。
