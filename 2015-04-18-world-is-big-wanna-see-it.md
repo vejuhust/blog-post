@@ -55,3 +55,10 @@ image:
 微软那么大，还木有看完呢:) Sorry, I quit!
 ——Wei
 
+<figure>
+  <a href="{{ site.url }}/images/photo/sorry-i-stay-4-msft.jpg"><img src="{{ site.url }}/images/photo/sorry-i-stay-4-msft.jpg"></a>
+  <figcaption>
+    <a href="{{ site.url }}" title="微软那么大，还木有看完呢:) Sorry, I quit! -Wei">微软那么大，还木有看完呢:) Sorry, I quit! -Wei</a>
+  </figcaption>
+</figure>
+
