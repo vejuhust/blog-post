@@ -455,11 +455,6 @@ git diff master admin       # 对比不同branch
 git blame index.html --date short
 {% endhighlight %}
 
-查看reflog:
-{% highlight bash %}
-git reflog
-{% endhighlight %}
-
 
 ## Purge Histroy
 
