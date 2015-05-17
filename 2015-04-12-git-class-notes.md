@@ -285,6 +285,7 @@ git remote -v
 push到远程仓库:
 {% highlight bash %}
 git push -u origin master   # -u将其设为默认，下次仅需git push
+git push --all origin       # 同时push本地分支和tags
 {% endhighlight %}
 
 将本地staging分支push到bingint上的master分支:
@@ -315,19 +316,24 @@ git clone git@github.com:vejuhust/learn-git.git demo
 :clipboard: **Info**: `git clone`等价于下载仓库，然后`git remote add origin`，最后check out主分支。
 {: .notice}
 
-创建远程仓库:
+创建远程分支:
 {% highlight bash %}
 git checkout -b cart
 git push origin cart
 {% endhighlight %}
 
-删除远程仓库:
+本地同步并切换到远处分支:
+{% highlight bash %}
+git checkout -b test origin/test
+{% endhighlight %}
+
+删除远程分支:
 {% highlight bash %}
 git push origin :cart
 git branch -d cart
 {% endhighlight %}
 
-本地清理已删除的远程仓库:
+本地清理已删除的远程分支:
 {% highlight bash %}
 git remote prune origin
 {% endhighlight %}
