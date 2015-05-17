@@ -321,6 +321,11 @@ git checkout -b cart
 git push origin cart
 {% endhighlight %}
 
+本地同步并切换到远处分支:
+{% highlight bash %}
+git checkout -b test origin/test
+{% endhighlight %}
+
 删除远程分支:
 {% highlight bash %}
 git push origin :cart
