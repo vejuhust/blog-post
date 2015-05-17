@@ -285,6 +285,7 @@ git remote -v
 push到远程仓库:
 {% highlight bash %}
 git push -u origin master   # -u将其设为默认，下次仅需git push
+git push --all origin       # 同时push本地分支和tags
 {% endhighlight %}
 
 将本地staging分支push到bingint上的master分支:
