@@ -2,7 +2,7 @@
 layout: post
 title: Git Class Notes
 excerpt: "Notes of getting started with Git based on CodeSchool courses"
-modified: 2015-04-12
+modified: 2015-11-27
 tags: [git, tool]
 comments: true
 ---
@@ -21,7 +21,9 @@ comments: true
 添加基本配置:
 {% highlight bash %}
 git config --global user.name "Wei Ye"
-git config --global user.email "vejuhust@gmail.com"
+git config --system user.email "vejuhust@gmail.com" # For all users
+git config --global user.email "vejuhust@gmail.com" # For current user
+git config --local user.email "vejuhust@gmail.com"  # For current repository
 git config --global color.ui auto
 git config --global color.ui true
 {% endhighlight %}
@@ -132,6 +134,7 @@ git commit -a -m "Modify readme.md" # Add changes from all tracked files
 {% highlight bash %}
 git diff            # 查看自上次commit以来unstaged的修改
 git diff --staged   # 查看staged的修改
+git diff -w         # 忽略空白字符的差异
 {% endhighlight %}
 
 
@@ -186,8 +189,8 @@ git checkout -- readme.md   # 撤销单个文件的当前修改，"--"用于区�
 撤销commit级修改:
 {% highlight bash %}
 git reset HEAD              # 撤销当前所有staged操作
-git reset --hard HEAD       # 撤销当前所有staged操作，并还原文件
 git reset --soft HEAD^      # 撤销上一次commit，并将文件置于staging状态
+git reset --hard HEAD       # 撤销当前所有staged操作，并还原文件
 git reset --hard HEAD^      # 撤销上一次commit，并还原文件
 git reset --hard HEAD^^     # 撤销前两次commit，并还原文件
 {% endhighlight %}
@@ -224,6 +227,7 @@ git checkout master
 创建并切换到新分支:
 {% highlight bash %}
 git checkout -b dog
+git checkout -b cat origin/cat    # 获取并切换到远程分支
 {% endhighlight %}
 
 删除分支:
@@ -581,10 +585,10 @@ git push
 {% highlight bash %}
 cd shared               # Step 1: 更新submodule本身
 git checkout master     # 此步不可缺少，因HEAD默认在no branch上
-git commit -a -m "Update shared."
+git commit -a -m "Update 'shared'."
 git push
 cd ..                   # Step 2: 更新所母仓库
-git commit -a -m "Update shared."
+git commit -a -m "Update reference to 'shared'."
 git push    
 git push --recurse-submodules=check     # 检查是否忘记push submodule
 git push --recurse-submodules=on-demand # 或者，将母仓库和submodule均push
