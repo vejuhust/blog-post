@@ -35,7 +35,7 @@ comments: true
 
 # Naming
 
-代码中的每一个名字都应被当作一条小小的注释(think of a name as a tiny comment)，起一个好的名字可以充分利用这狭小的空间。
+代码中的每一个名字都应**当作一条小小的注释(think of a name as a tiny comment)**，起一个好的名字可以充分利用这狭小的空间。
 
 :bulb: **Key Point**    
 把信息装入名字。    
@@ -50,7 +50,7 @@ Pack information into your names.
 
 * `def GetPage(url):` - get信息量不足，无法确定是缓存、数据库还是互联网，考虑用FetchPage或DownloadPage。
 * `class BinaryTree { int Size(); };` - size不够明确，没有指明是树的高度、节点数还是占用的内存空间，改进为Height，NumNodes或MemoryBytes。
-* `class Thread { void Stop(); };` - stop做的事情没有澄清，对于无法恢复的重量级操作应使用Kill，如果有对应的Resume，可以叫Pause。
+* `class Thread { void Stop(); };` - stop做的事情没有澄清，对于无法恢复的操作应使用Kill，若有对应的Resume，可以叫Pause。
 
 常用词替换表：
 
@@ -64,6 +64,10 @@ Pack information into your names.
 
 
 ## Avoid Generic Names
+
+tmp、retval和foo、bar之流往往就是想不出名字的托辞，与之相反，我们选用的名字应当**能够描述变量的目的或者它所承载的值**。
+
+
 
 ## Use Concrete Names
 
