@@ -46,6 +46,23 @@ Pack information into your names.
 
 ## Use Specific Words
 
+要选择专业而不是空洞的词。例如：
+
+* `def GetPage(url):` - get信息量不足，无法确定是缓存、数据库还是互联网，考虑用FetchPage或DownloadPage。
+* `class BinaryTree { int Size(); };` - size不够明确，没有指明是树的高度、节点数还是占用的内存空间，改进为Height，NumNodes或MemoryBytes。
+* `class Thread { void Stop(); };` - stop做的事情没有澄清，对于无法恢复的重量级操作应使用Kill，如果有对应的Resume，可以叫Pause。
+
+常用词替换表：
+
+| Word  | Alternatives                                       |
+|:-----:|:---------------------------------------------------|
+| send  | deliver, dispatch, announce, distribute, route     |
+| find  | search, extract, locate, recover                   |
+| start | launch, create, begin, open                        |
+| make  | create, set up, build, generate, compose, add, new |
+{: rules="groups"}
+
+
 ## Avoid Generic Names
 
 ## Use Concrete Names
