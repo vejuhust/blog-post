@@ -32,3 +32,29 @@ comments: true
 * 代码并不总是越短越好，一味的减少代码行数可能让其理解起来花费更久。例如，合并长表达式、删去必要的注释。
 * 代码的易读性与效率、架构、可测试性并没有冲突。
 
+
+# Naming
+
+代码中的每一个名字都应被当作一条小小的注释(think of a name as a tiny comment)，起一个好的名字可以充分利用这狭小的空间。
+
+:bulb: **Key Point**    
+把信息装入名字。    
+Pack information into your names.    
+{: .notice}
+
+起一个好的名字应当注意以下几个方面：
+
+## Choose Specific Words
+
+## Avoid Generic Names
+
+## Prefer Concrete Names over Abstract Names
+
+## Attach Extra Information to a Name by Suffix or Prefix 
+
+## Length of Names
+
+## Name Formatting Can Convey Meaning
+
+
+
