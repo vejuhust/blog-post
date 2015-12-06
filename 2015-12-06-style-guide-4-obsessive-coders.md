@@ -44,17 +44,17 @@ Pack information into your names.
 
 起一个好的名字应当注意以下几个方面：
 
-## Choose Specific Words
+## Use Specific Words
 
 ## Avoid Generic Names
 
-## Prefer Concrete Names over Abstract Names
+## Use Concrete Names
 
-## Attach Extra Information to a Name by Suffix or Prefix 
+## Attach Important Details 
 
-## Length of Names
+## Use Longer Names for Larger Scopes
 
-## Name Formatting Can Convey Meaning
+## Use Capitalization, Underscores to Convey Meanings
 
-
+## Use Names That Can't Be Misconstrued
 
