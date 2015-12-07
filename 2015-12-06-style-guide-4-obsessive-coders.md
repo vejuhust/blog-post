@@ -69,8 +69,12 @@ Pack information into your names.
 
 ## Avoid Generic Names
 
-tmp、retval和foo、bar之流往往就是想不出名字的托辞，与之相反，我们选用的名字应当**能够描述变量的目的或者它所承载的值**。
+tmp、retval和foo、bar之流往往就是想不出名字的托辞，与之相反，我们选用的名字应当能够**描述变量的目的或者它所承载的值**。
 
+* retval包含信息不足，应当使用描述该变量的值的名字来替代。例如，用sum_squares来表示平方和。
+* tmp只应用于短期存在并且临时性为其主要存在因素的变量。例如，交互两个变量的值，其他情况下user_info和tmp_file这样的变量名则更佳。
+* 与用i、j、k、it和iter作索引/循环迭代器相比，使用更精确的名字可以让代码中的缺陷更为明显。例如，用clubs_i、members_i、users_i或ci、mi、ui来替代i、j、k。
+* 如果理由恰当，这样空泛的变量名并非不能使用。
 
 
 ## Use Concrete Names
