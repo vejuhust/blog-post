@@ -79,6 +79,12 @@ tmp、retval和foo、bar之流往往就是想不出名字的托辞，与之相�
 
 ## Use Concrete Names
 
+在给变量、函数或元素命名的时候，应当把它描述的更具体而不是更抽象。例如：
+
+* 对于检测服务是否可以监听某个端口的方法，叫`CanListenOnPort()`比`ServerCanStart()`要好。
+* 对于禁止拷贝构造函数或赋值操作符的宏，叫`DISALLOW_COPY_AND_ASSIGN()`比`DISALLOW_EVIL_CONSTRUCTORS()`更妥当。
+* 对于输出额外调试信息的命令行参数，叫`--extra_logging`就比`--run_locally`要清晰，如果要建立和使用本地数据库，那么可以另加一个`--use_local_database`。
+
 
 ## Attach Important Details 
 
