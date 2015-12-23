@@ -88,6 +88,33 @@ tmp、retval和foo、bar之流往往就是想不出名字的托辞，与之相�
 
 ## Attach Important Details 
 
+变量名常被看作是必读的短小注释，因此可以将必须让读者知道的重要信息添加进去。两个方向：
+
+* 为度量添加度量单位，例如用start_ms和elapsed_ms代替start和elapsed来度量时间。
+* 添加重要属性的说明，特别是安全缺陷或让人感到意外的属性，例如untrustedUrl或unsafeMessageBody。
+
+度量单位举例：
+
+| Function                      | Variable Name | Better Name |
+|:------------------------------|:--------------|:------------|
+| Start(int delay)              | delay         | delay_secs  |
+| CreateCache(int size)         | size          | size_mb     |
+| ThrottleDownload(float limit) | limit         | max_kbps    |
+| Rotate(float angle)           | angle         | degrees_cw  |
+| Commit(string id)             | id            | hex_id      |
+{: rules="groups"}
+
+
+附加重要属性举例：
+
+| Situation                              | Variable Name | Better Name        |
+|:---------------------------------------|:--------------|:-------------------|
+| 纯文本格式的密码，进一步处理前需要加密 | password      | plaintext_password |
+| 用户发布的注释，展示之前需要转义       | comment       | unescaped_comment  |
+| 已转为UTF-8格式的HTML字节              | html          | html_utf8          |
+| 以URL编码的输入数据                    | data          | data_urlenc        |
+{: rules="groups"}
+
 
 ## Use Longer Names for Larger Scopes
 
