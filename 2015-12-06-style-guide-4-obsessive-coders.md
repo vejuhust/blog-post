@@ -118,6 +118,12 @@ tmp、retval和foo、bar之流往往就是想不出名字的托辞，与之相�
 
 ## Use Longer Names for Larger Scopes
 
+* 对于几屏之间都可见的变量不应使用令人费解的单个字母。
+* 对于只在短短几行小作用域里的变量则应使用短名字。
+* 变量名应避免使用项目特有的缩略词/缩写，要以团队新成员是否能够理解含义为准则。
+* 应删去名字中拿掉而不会有信息损失的冗余单词，例如`ConvertToString()`应改为`ToString()`。
+
+
 
 ## Use Capitalization, Underscores to Convey Meanings
 
