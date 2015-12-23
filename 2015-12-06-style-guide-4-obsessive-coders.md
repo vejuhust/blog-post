@@ -11,7 +11,8 @@ comments: true
 
 
 [^1]: <https://en.wikipedia.org/wiki/The_Elements_of_Programming_Style>
-
+[^2]: <https://google.github.io/styleguide/cppguide.html#Constant_Names>
+[^3]: <https://google.github.io/styleguide/cppguide.html#Macro_Names>
 
 
 对于代码风格的严肃讨论由上世纪70年代《The Elements of Programming Style》[^1]一书开启，它指出风格良好的代码应不仅仅遵循编译通过或个人习惯这样简单的要求，更应当能够被其他人类所理解。也就是说，在代码评判方面，可读性是非常重要的指标。
@@ -118,14 +119,22 @@ tmp、retval和foo、bar之流往往就是想不出名字的托辞，与之相�
 
 ## Use Longer Names for Larger Scopes
 
-* 对于几屏之间都可见的变量不应使用令人费解的单个字母。
+* 对于几屏之间都可见的变量不应使用令人费解的单个字母，应相对偏长。
 * 对于只在短短几行小作用域里的变量则应使用短名字。
 * 变量名应避免使用项目特有的缩略词/缩写，要以团队新成员是否能够理解含义为准则。
 * 应删去名字中拿掉而不会有信息损失的冗余单词，例如`ConvertToString()`应改为`ToString()`。
 
 
-
 ## Use Capitalization, Underscores to Convey Meanings
+
+对不同的实体使用不同的格式就像语法高亮的显示形式一样，能够让你更容易地阅读代码。例如：
+
+* 《Google C++格式规范》要求：
+  - kConstantName表示常量，区别于MACRO_NAME表示的宏[^2]。
+  - 类成员变量与普通变量的区别是以下划线`_`结尾[^3]。
+* 《JavaScript: The Good Part》指出，构造函数应当首字母大写，普通函数首字母小写。
+* jQuery返回的对象也同样加上`$`作为前缀以示区分。
+* 在HTML/CSS中，用下划线`_`来分割ID中的单词，class中用连字符`-`。
 
 
 ## Use Names That Can't Be Misconstrued
