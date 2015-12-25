@@ -139,3 +139,18 @@ tmp、retval和foo、bar之流往往就是想不出名字的托辞，与之相�
 
 ## Use Names That Can't Be Misconstrued
 
+:bulb: **Key Point**    
+仔细审视名字并多问自己几遍：“这个名字会被别人解读成其他含义吗？”    
+Actively scrutinize your names by asking yourself, "What other meanings could someone interpret from this name?"
+{: .notice}
+
+我们应当小心处理可能会有歧义的名字。例如：
+
+* 避免用filter: 因为它的含义可能是“挑出”或者是“减掉”。
+* 用truncate代替clip: 因为clip的含义可能是“从尾部删除length的长度”或“截取最大为length的一段”。
+* 给要限制的事物加上min_或max_前缀表示包含在内的极限，limit有“少于”和“少于等于”的二义性。
+* 对于前后都被包含的范围(e.g. `[1, 4]`)，用first/last来表示，或者考虑min/max。
+* 对于包含/排除的范围(e.g. `[1, 5)`)，用begin/end来表示。
+* 为布尔值命名，使用is、has、can或should一类的词，避免使用否定意义的词，例如用use_ssl而非disable_ssl。
+* 用户期望get()和size()都是轻量级的方法，如果是O(n)的时间复杂度要叫做compute()和count()。
+
