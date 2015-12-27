@@ -2,7 +2,7 @@
 layout: post
 title: Style Guide for Obsessive Coders
 excerpt: "What should be my default coding style?"
-modified: 2015-12-06
+modified: 2015-12-27
 tags: [coding, programming]
 comments: true
 ---
@@ -135,6 +135,7 @@ tmp、retval和foo、bar之流往往就是想不出名字的托辞，与之相�
 * 对于几屏之间都可见的变量不应使用令人费解的单个字母，应相对偏长。
 * 对于只在短短几行小作用域里的变量则应使用短名字。
 * 变量名应避免使用项目特有的缩略词/缩写，要以团队新成员是否能够理解含义为准则。
+* 避免过度缩减单词，应考虑其发音是否会让人难以谈论，例如用`RegisterUser`而非`RegistUsr`。
 * 应删去名字中拿掉而不会有信息损失的冗余单词，例如`ConvertToString()`应改为`ToString()`。
 
 
@@ -164,6 +165,8 @@ Actively scrutinize your names by asking yourself, "What other meanings could so
 * 给要限制的事物加上min\_或max\_前缀表示包含在内的极限，limit有“少于”和“少于等于”的二义性。
 * 对于前后都被包含的范围(e.g. `[1, 4]`)，用first/last来表示，或者考虑min/max。
 * 对于包含/排除的范围(e.g. `[1, 5)`)，用begin/end来表示。
-* 为布尔值命名，使用is、has、can或should一类的词，避免使用否定意义的词，例如用use\_ssl而非disable\_ssl。
+* 应确保布尔值的true和false意义明确，读起来像一道是非题，使用is、has、can或should一类的词，避免使用否定意义的词，例如用use\_ssl而非disable\_ssl。
 * 用户期望get()和size()都是轻量级的方法，如果是O(n)的时间复杂度要叫做compute()和count()。
+
+
 
