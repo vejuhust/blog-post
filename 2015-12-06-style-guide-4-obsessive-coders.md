@@ -10,9 +10,9 @@ comments: true
 {% include _toc.html %}
 
 
-[^1]: <https://en.wikipedia.org/wiki/The_Elements_of_Programming_Style>
-[^2]: <https://google.github.io/styleguide/cppguide.html#Constant_Names>
-[^3]: <https://google.github.io/styleguide/cppguide.html#Macro_Names>
+[^1]: Wikipedia <https://en.wikipedia.org/wiki/The_Elements_of_Programming_Style>
+[^2]: Google C++ Style Guide <https://google.github.io/styleguide/cppguide.html#Constant_Names>
+[^3]: Google C++ Style Guide <https://google.github.io/styleguide/cppguide.html#Macro_Names>
 
 
 对于代码风格的严肃讨论由上世纪70年代《The Elements of Programming Style》[^1]一书开启，它指出风格良好的代码应不仅仅遵循编译通过或个人习惯这样简单的要求，更应当能够被其他人类所理解。也就是说，在代码评判方面，可读性是非常重要的指标。
