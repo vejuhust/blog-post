@@ -10,7 +10,13 @@ comments: true
 {% include _toc.html %}
 
 
-# Setup
+# Prepare the Board
+
+在进一步探索之前，需要先准备好BBB的配件以及microSD卡。
+
+## Accessory
+
+## Install Debian on microSD Card
 
 先去BeagleBone官方网站<http://beagleboard.org/latest-images>寻找合适的Debian镜像，这次我选择的是2015年11月12日发布的Debian 7.9版本。用任意工具直接下载即可，考虑到国内下载比较慢，不妨用海外的机器下载再复制回来：
 
@@ -58,7 +64,9 @@ sudo diskutil eject /dev/rdisk9
 
 取出microSD卡并插入关机状态的BBB中，按住Boot Switch按钮并通电开机，当BBB上的两个蓝色LED点亮时松开即可。/* 在我的BBB上，不按按钮也能正确从microSD卡加载系统。 */查询到BBB的IP地址，用SSH直接登陆，默认的用户名是`debian`，密码是`temppwd`。登陆后记得使用`passwd`命令修改。
 
-如果使用的microSD卡不止4GB，那么我们需要在BBB调整它的分区表来充分利用剩余的空间。用`fdisk`的操作记录如下，输入部分均用`↩︎`标出：
+## Expand the File System Partition
+
+如果使用的microSD卡不止4GB，那么我们需要在BBB上调整它的分区表来充分利用剩余的空间。用`fdisk`的操作记录如下，输入部分均用`↩︎`标出：
 
 {% highlight bash %}
 root@beaglebone:~# fdisk /dev/mmcblk0↩
@@ -124,7 +132,7 @@ sudo resize2fs /dev/mmcblk0p2
 至此，文件系统已经调整完毕，可以用`df -h`命令查看结果：
 
 {% highlight bash %}
-root@beaglebone:~# df -h
+root@beaglebone:~# df -h↩
 Filesystem      Size  Used Avail Use% Mounted on
 rootfs           15G  1.9G   12G  14% /
 udev             10M     0   10M   0% /dev
