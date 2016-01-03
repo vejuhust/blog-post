@@ -15,9 +15,9 @@ BeagleBone Black (a.k.a. BBB)
 
 # Prepare the Board
 
-在进一步探索之前，需要先准备好BBB的配件以及microSD卡。
+在进一步实验之前，需要先准备好BBB的配件以及microSD卡。
 
-## Accessory
+## Accessories for BBB
 
 如果选择以太网口连接BBB的话，网线之外，以下二者选其一用于供电：
 
@@ -26,11 +26,11 @@ BeagleBone Black (a.k.a. BBB)
 
 在不差钱的情况下，还有其他配件可以考虑：
 
-* microSD卡 & 读卡器 - 至少4GB，用于搭载或刷入操作系统
+* microSD卡 - 至少4GB，以及读卡器，用于搭载或刷入操作系统
 * USB Hub - 以扩展BBB上唯一的USB接口
 * USB转TTL-232数据线 - 在无网络的情况，通过串口连接
 * 保护壳 - 能一定程度上防摔和防静电
-* Micro HDMI视频线 & 显示器 - 用于连接支持HDMI的显示器
+* Micro HDMI视频线 - 用于连接支持HDMI的显示器
 * 键鼠套装 - 如果需要直接作为桌面机器使用
 
 
@@ -84,7 +84,7 @@ sudo diskutil eject /dev/rdisk9
 
 取出microSD卡并插入关机状态的BBB中，按住Boot Switch按钮并通电开机，当BBB上的两个蓝色LED点亮时松开即可。/* 在我的BBB上，不按按钮也能正确从microSD卡加载系统。 */查询到BBB的IP地址，用SSH直接登陆，默认的用户名是`debian`，密码是`temppwd`。登陆后记得使用`passwd`命令修改。
 
-## Expand the File System Partition
+## Expand File System Partition
 
 如果使用的microSD卡不止4GB，那么我们需要在BBB上调整它的分区表来充分利用剩余的空间。用`fdisk`的操作记录如下，输入部分均用`↩︎`标出：
 
