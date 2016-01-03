@@ -10,13 +10,33 @@ comments: true
 {% include _toc.html %}
 
 
+BeagleBone Black (a.k.a. BBB)
+
+
 # Prepare the Board
 
 在进一步探索之前，需要先准备好BBB的配件以及microSD卡。
 
 ## Accessory
 
+如果选择以太网口连接BBB的话，网线之外，以下二者选其一用于供电：
+
+* mini USB数据线
+* 5V 1A直流电源适配器
+
+在不差钱的情况下，还有其他配件可以考虑：
+
+* microSD卡 & 读卡器 - 至少4GB，用于搭载或刷入操作系统
+* USB Hub - 以扩展BBB上唯一的USB接口
+* USB转TTL-232数据线 - 在无网络的情况，通过串口连接
+* 保护壳 - 能一定程度上防摔和防静电
+* Micro HDMI视频线 & 显示器 - 用于连接支持HDMI的显示器
+* 键鼠套装 - 如果需要直接作为桌面机器使用
+
+
 ## Install Debian on microSD Card
+
+BBB自带的eMMC中载有Ångström或Debian系统，如果不满足于eMMC的容量或者想使用其他操作系统，我们需要将其写入microSD卡。
 
 先去BeagleBone官方网站<http://beagleboard.org/latest-images>寻找合适的Debian镜像，这次我选择的是2015年11月12日发布的Debian 7.9版本。用任意工具直接下载即可，考虑到国内下载比较慢，不妨用海外的机器下载再复制回来：
 
@@ -143,3 +163,4 @@ tmpfs           249M     0  249M   0% /sys/fs/cgroup
 tmpfs           5.0M     0  5.0M   0% /run/lock
 tmpfs           100M     0  100M   0% /run/user
 {% endhighlight %}
+
