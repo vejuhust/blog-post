@@ -17,6 +17,7 @@ BeagleBone Black (a.k.a. BBB)
 
 在进一步实验之前，需要先准备好BBB的配件以及microSD卡。
 
+
 ## Accessories for BBB
 
 如果选择以太网口连接BBB的话，网线之外，以下二者选其一用于供电：
@@ -163,4 +164,41 @@ tmpfs           249M     0  249M   0% /sys/fs/cgroup
 tmpfs           5.0M     0  5.0M   0% /run/lock
 tmpfs           100M     0  100M   0% /run/user
 {% endhighlight %}
+
+
+
+# GPIO Pins
+
+* GPIO的插图
+* 几种GPIO名称的读法
+
+
+
+# Blink the LED
+
+* Hello World实验
+* 实验器材
+* 电阻计算
+
+## Blink On-Board LED
+
+* USR0 LED插图
+* 用BoneScript编写
+
+
+## Blink External LED with Bash
+
+* 插线图
+* 命令行控制并解释
+* Bash脚本闪亮
+
+
+## Blink External LED with Node.js
+
+* 用BoneScript编写
+
+
+## Blink External LED with Python
+
+* 用Python编写
 
