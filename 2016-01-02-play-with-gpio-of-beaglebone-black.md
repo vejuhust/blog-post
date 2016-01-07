@@ -424,3 +424,72 @@ direction = in
 ^C
 root@beaglebone:~# 
 {% endhighlight %}
+
+
+
+# Turn on the LED
+
+## Push Switch by Polling
+
+* 电路设计
+* 通过轮询方式实现按压式开关
+
+{% highlight bash %}
+#!/bin/bash
+
+SWITCH_GPIO=49
+LIGHT_GPIO=7
+
+echo "$SWITCH_GPIO" > /sys/class/gpio/export
+printf "switch_pin = gpio_%d\n" "$SWITCH_GPIO"
+
+echo in > /sys/class/gpio/gpio"$SWITCH_GPIO"/direction
+printf "switch_direction = %s\n" $(cat /sys/class/gpio/gpio"$SWITCH_GPIO"/direction)
+
+echo "$LIGHT_GPIO" > /sys/class/gpio/export
+printf "light_pin = gpio_%d\n" "$LIGHT_GPIO"
+
+echo out > /sys/class/gpio/gpio"$LIGHT_GPIO"/direction
+printf "light_direction = %s\n" $(cat /sys/class/gpio/gpio"$LIGHT_GPIO"/direction)
+
+while [ 1 ]; do
+    light_status=$(cat /sys/class/gpio/gpio"$SWITCH_GPIO"/value)
+    echo $light_status > /sys/class/gpio/gpio"$LIGHT_GPIO"/value
+    printf "[%s] light = %s\n" $(date '+%H:%M:%S.%N') $light_status
+    sleep 0.2
+done
+{% endhighlight %}
+
+
+{% highlight python %}
+#!/usr/bin/env python
+
+from Adafruit_BBIO import GPIO
+from time import sleep, time
+
+switchPin = "P9_23"
+lightPin = "P9_42"
+
+GPIO.setup(switchPin, GPIO.IN)
+GPIO.setup(lightPin, GPIO.OUT)
+
+previouStatus = ""
+timeStart = time()
+
+def change_light_status(lightStatus):
+    global previouStatus
+    GPIO.output(lightPin, lightStatus)
+    if lightStatus != previouStatus:
+        print "[%9.5f] light = %s" % (time() - timeStart, lightStatus)
+        previouStatus = lightStatus
+    sleep(0.2)
+
+while True:
+    while GPIO.input(switchPin):
+        change_light_status(GPIO.HIGH)
+    change_light_status(GPIO.LOW)
+
+GPIO.cleanup()
+{% endhighlight %}
+
+
