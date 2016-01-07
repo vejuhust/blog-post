@@ -309,6 +309,9 @@ GPIO.cleanup()
 
 ## Pull-Up Resistor
 
+* 搭建按钮
+* 引入上拉概念
+
 {% highlight bash %}
 #!/bin/bash
 
@@ -329,6 +332,8 @@ done
 
 ## Pull-Down Resistor
 
+* 引入下拉概念
+
 {% highlight bash %}
 #!/bin/bash
 
@@ -347,7 +352,12 @@ done
 {% endhighlight %}
 
 
-## Configure GPIO Pin
+## Internal Pull-Up/Down Resistors
+
+* 引入BBB内部上拉/下拉电路
+* 考虑外部上拉/下拉电路与内部上拉/下拉相冲突的情况
+* 外下拉内上拉，全部输出是1：下拉接9.11
+* 外上拉内下拉，工作正常：上拉接9.23
 
 {% highlight bash %}
 #!/bin/bash
@@ -366,6 +376,13 @@ while [ 1 ]; do
 done
 {% endhighlight %}
 
+
+## Configure GPIO Pins
+
+* pinmux设置法
+* device tree概念
+* 设置工具config-pin
+* 下拉接9.11的修复：P9\_11 in 或 P9\_11 in-
 
 {% highlight bash %}
 echo cape-universaln > /sys/devices/bone_capemgr.*/slots
