@@ -312,16 +312,16 @@ GPIO.cleanup()
 {% highlight bash %}
 #!/bin/bash
 
-PIN=61 # pull-up
+GPIO_NUM=61 # has an internal pull-up resistor by default
 
-echo "$PIN" > /sys/class/gpio/export
-printf "pin = gpio_%d\n" "$PIN"
+echo "$GPIO_NUM" > /sys/class/gpio/export
+printf "pin = gpio_%d\n" "$GPIO_NUM"
 
-echo in > /sys/class/gpio/gpio"$PIN"/direction
-printf "direction = %s\n" $(cat /sys/class/gpio/gpio"$PIN"/direction)
+echo in > /sys/class/gpio/gpio"$GPIO_NUM"/direction
+printf "direction = %s\n" $(cat /sys/class/gpio/gpio"$GPIO_NUM"/direction)
 
 while [ 1 ]; do
-    printf "[%s] input = %s\n" $(date '+%H:%M:%S.%N') $(cat /sys/class/gpio/gpio"$PIN"/value)
+    printf "[%s] input = %s\n" $(date '+%H:%M:%S.%N') $(cat /sys/class/gpio/gpio"$GPIO_NUM"/value)
     sleep 0.5
 done
 {% endhighlight %}
@@ -332,18 +332,19 @@ done
 {% highlight bash %}
 #!/bin/bash
 
-PIN=44 # pull-down
+GPIO_NUM=44 # has an internal pull-down resistor by default
 
-echo "$PIN" > /sys/class/gpio/export
-printf "pin = gpio_%d\n" "$PIN"
+echo "$GPIO_NUM" > /sys/class/gpio/export
+printf "pin = gpio_%d\n" "$GPIO_NUM"
 
-echo in > /sys/class/gpio/gpio"$PIN"/direction
-printf "direction = %s\n" $(cat /sys/class/gpio/gpio"$PIN"/direction)
+echo in > /sys/class/gpio/gpio"$GPIO_NUM"/direction
+printf "direction = %s\n" $(cat /sys/class/gpio/gpio"$GPIO_NUM"/direction)
 
 while [ 1 ]; do
-    printf "[%s] input = %s\n" $(date '+%H:%M:%S.%N') $(cat /sys/class/gpio/gpio"$PIN"/value)
+    printf "[%s] input = %s\n" $(date '+%H:%M:%S.%N') $(cat /sys/class/gpio/gpio"$GPIO_NUM"/value)
     sleep 0.5
 done
 {% endhighlight %}
 
 
+## Configure GPIO Pin
