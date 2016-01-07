@@ -233,7 +233,7 @@ echo 0 > /sys/class/gpio/gpio30/value
 
 
 {% highlight bash %}
-#!/bin/sh
+#!/bin/bash
 
 echo 30 > /sys/class/gpio/export
 echo out > /sys/class/gpio/gpio30/direction
@@ -301,4 +301,49 @@ while True:
 
 GPIO.cleanup()
 {% endhighlight %}
+
+
+
+# Read the Button
+
+
+## Pull-Up Resistor
+
+{% highlight bash %}
+#!/bin/bash
+
+PIN=61 # pull-up
+
+echo "$PIN" > /sys/class/gpio/export
+printf "pin = gpio_%d\n" "$PIN"
+
+echo in > /sys/class/gpio/gpio"$PIN"/direction
+printf "direction = %s\n" $(cat /sys/class/gpio/gpio"$PIN"/direction)
+
+while [ 1 ]; do
+    printf "[%s] input = %s\n" $(date '+%H:%M:%S.%N') $(cat /sys/class/gpio/gpio"$PIN"/value)
+    sleep 0.5
+done
+{% endhighlight %}
+
+
+## Pull-Down Resistor
+
+{% highlight bash %}
+#!/bin/bash
+
+PIN=44 # pull-down
+
+echo "$PIN" > /sys/class/gpio/export
+printf "pin = gpio_%d\n" "$PIN"
+
+echo in > /sys/class/gpio/gpio"$PIN"/direction
+printf "direction = %s\n" $(cat /sys/class/gpio/gpio"$PIN"/direction)
+
+while [ 1 ]; do
+    printf "[%s] input = %s\n" $(date '+%H:%M:%S.%N') $(cat /sys/class/gpio/gpio"$PIN"/value)
+    sleep 0.5
+done
+{% endhighlight %}
+
 
