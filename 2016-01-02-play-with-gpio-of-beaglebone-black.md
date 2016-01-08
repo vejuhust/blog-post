@@ -493,3 +493,39 @@ GPIO.cleanup()
 {% endhighlight %}
 
 
+## Status Switch by Interrupt
+
+{% highlight python %}
+#!/usr/bin/env python
+
+from Adafruit_BBIO import GPIO
+from time import sleep, time
+
+switchPin = "P9_23"
+lightPin = "P9_42"
+
+GPIO.setup(switchPin, GPIO.IN)
+GPIO.setup(lightPin, GPIO.OUT)
+
+previouStatus = ""
+timeStart = time()
+
+def change_light_status(lightStatus):
+    global previouStatus
+    GPIO.output(lightPin, lightStatus)
+    if lightStatus != previouStatus:
+        print "[%9.5f] light = %s" % (time() - timeStart, lightStatus)
+        previouStatus = lightStatus
+    sleep(0.2)
+
+while True:
+    GPIO.wait_for_edge(switchPin, GPIO.RISING)
+    change_light_status(GPIO.HIGH)
+    GPIO.wait_for_edge(switchPin, GPIO.FALLING)
+    change_light_status(GPIO.LOW)
+
+GPIO.cleanup()
+{% endhighlight %}
+
+{% highlight python %}
+{% endhighlight %}
