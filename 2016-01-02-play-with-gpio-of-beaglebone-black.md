@@ -519,7 +519,7 @@ def change_light_status(lightStatus):
     sleep(0.2)
 
 while True:
-    GPIO.wait_for_edge(switchPin, GPIO.RISING)
+    GPIO.wait_for_edge(switchPin, GPIO.FALLING)
     change_light_status(GPIO.HIGH)
     GPIO.wait_for_edge(switchPin, GPIO.FALLING)
     change_light_status(GPIO.LOW)
@@ -527,5 +527,37 @@ while True:
 GPIO.cleanup()
 {% endhighlight %}
 
+使用PyBBIO库，并加入最小间隔时间限制，避免闪烁灯泡。
+
 {% highlight python %}
+#!/usr/bin/env python
+
+from bbio import *
+from time import time
+
+switchPin = GPIO1_17
+lightPin = GPIO0_7
+
+def change_light_status():
+    global timeStart
+    global timePrevious
+    timeCurrent = time()
+    if timeCurrent - timePrevious > 0.1:
+        toggle(lightPin)
+        timePrevious = timeCurrent
+        print "[%9.5f] light = %s" % (timeCurrent - timeStart, pinState(lightPin))
+
+def setup():
+    global timeStart
+    global timePrevious
+    pinMode(switchPin, INPUT, PULLDOWN)
+    pinMode(lightPin, OUTPUT)
+    attachInterrupt(switchPin, change_light_status, FALLING)
+    timeStart = time()
+    timePrevious = timeStart
+
+def loop():
+    delay(1000)
+
+run(setup, loop)
 {% endhighlight %}
