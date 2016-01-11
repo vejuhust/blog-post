@@ -563,3 +563,60 @@ def loop():
 
 run(setup, loop)
 {% endhighlight %}
+
+
+
+# Humidity Sensor
+
+## Hardware
+
+* 传感器
+* 连线图
+
+## Weather Station
+
+* 使用Adafruit_DHT的库
+* 读取数据后通过HTTP HEAD发送到服务器
+
+{% highlight python %}
+#!/usr/bin/env python
+
+import Adafruit_DHT
+from time import time
+from datetime import datetime
+from httplib import HTTPConnection
+from threading import Timer
+
+def generate_report_string(date, temperature, humidity, time_lapsed):
+    report_string = "{0:s};{1:0.2f};{2:0.2f};{3:0.3f};".format(date.isoformat(), temperature, humidity, time_lapsed)
+    return report_string
+
+def read_weather_status():
+    date = datetime.now()
+    time_start = time()
+    humidity, temperature = Adafruit_DHT.read_retry(Adafruit_DHT.DHT11, "P9_12")
+    return date, temperature, humidity, time() - time_start
+
+def submit_weather_status():
+    status_measure = False
+    date, temperature, humidity, time_lapsed = read_weather_status()
+    if humidity is not None and temperature is not None:
+        headers = { "User-Agent": generate_report_string(date, temperature, humidity, time_lapsed)}
+        connection = HTTPConnection("service.yewei.me")
+        connection.request("HEAD", "/weather", headers = headers)
+        status_measure = True
+    return status_measure
+
+def loop():
+    Timer(30, loop).start()
+    submit_weather_status()
+
+if __name__ == '__main__':
+    loop()
+{% endhighlight %}
+
+
+## Weather Channel
+
+* 服务器清洗数据
+* 服务器展示结果
