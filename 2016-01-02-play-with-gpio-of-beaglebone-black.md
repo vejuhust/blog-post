@@ -495,6 +495,8 @@ GPIO.cleanup()
 
 ## Status Switch by Interrupt
 
+底层的实现是基于Linux的[epoll_wait()](http://man7.org/linux/man-pages/man2/epoll_wait.2.html)系统调用。
+
 {% highlight python %}
 #!/usr/bin/env python
 
@@ -527,7 +529,7 @@ while True:
 GPIO.cleanup()
 {% endhighlight %}
 
-使用PyBBIO库，并加入最小间隔时间限制，避免闪烁灯泡。
+使用PyBBIO库，并加入最小间隔时间限制，避免闪烁灯泡。底层的实现是基于Linux的[epoll()](http://man7.org/linux/man-pages/man7/epoll.7.html)系统调用。
 
 {% highlight python %}
 #!/usr/bin/env python
