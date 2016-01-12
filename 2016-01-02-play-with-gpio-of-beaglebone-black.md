@@ -654,3 +654,46 @@ cat /var/log/nginx/access.log | grep -i "/weather" | cut -d'"' -f6 | cut -d';' -
 * XOBXOB <http://www.xobxob.com/>
 * SensorCloud <http://www.sensorcloud.com/>
 
+
+# PM2.5 Sensor
+
+## UART: E-E-c-c-h-h-o-o
+
+{% highlight bash %}
+root@beaglebone:~# ls /dev/ttyO*↩
+/dev/ttyO0
+root@beaglebone:~# ls /lib/firmware/*UART*↩
+/lib/firmware/ADAFRUIT-UART1-00A0.dtbo	/lib/firmware/ADAFRUIT-UART2-00A0.dtbo	/lib/firmware/ADAFRUIT-UART4-00A0.dtbo	/lib/firmware/ADAFRUIT-UART5-00A0.dtbo
+root@beaglebone:~# echo ADAFRUIT-UART4 > /sys/devices/bone_capemgr.9/slots↩
+root@beaglebone:~# cat /sys/devices/bone_capemgr.9/slots↩
+ 0: 54:PF--- 
+ 1: 55:PF--- 
+ 2: 56:PF--- 
+ 3: 57:PF--- 
+ 4: ff:P-O-L Bone-LT-eMMC-2G,00A0,Texas Instrument,BB-BONE-EMMC-2G
+ 5: ff:P-O-L Bone-Black-HDMI,00A0,Texas Instrument,BB-BONELT-HDMI
+ 7: ff:P-O-L Override Board Name,00A0,Override Manuf,ADAFRUIT-UART4
+root@beaglebone:~# ls /dev/ttyO*↩
+/dev/ttyO0  /dev/ttyO4
+root@beaglebone:~# 
+{% endhighlight %}
+
+{% highlight bash %}
+apt-get update
+apt-get install -y minicom
+minicom -b 9200 -o -D /dev/ttyO4
+{% endhighlight %}
+
+{% highlight text %}
+Welcome to minicom 2.6.1                                                                                           
+                                                                                                                   
+OPTIONS: I18n                                                                                                      
+Compiled on Feb 11 2012, 18:45:56.                                                                                 
+Port /dev/ttyO4                                                                                                    
+                                                                                                                   
+Press CTRL-A Z for help on special keys                                                                            
+                                                                                                                   
+hheelllloo,,  wwoorrlldd!!                                                                                         
+                                                                                                                   
+{% endhighlight %}
+
