@@ -89,7 +89,7 @@ sudo diskutil eject /dev/rdisk9
 
 如果使用的microSD卡不止4GB，那么我们需要在BBB上调整它的分区表来充分利用剩余的空间。用`fdisk`的操作记录如下，输入部分均用`↩︎`标出：
 
-{% highlight bash %}
+{% highlight bash linenos %}
 root@beaglebone:~# fdisk /dev/mmcblk0↩
 
 Command (m for help): p↩
@@ -152,7 +152,7 @@ sudo resize2fs /dev/mmcblk0p2
 
 至此，文件系统已经调整完毕，可以用`df -h`命令查看结果：
 
-{% highlight bash %}
+{% highlight bash linenos %}
 root@beaglebone:~# df -h↩
 Filesystem      Size  Used Avail Use% Mounted on
 rootfs           15G  1.9G   12G  14% /
@@ -392,7 +392,7 @@ cat /sys/kernel/debug/pinctrl/44e10800.pinmux/pins | grep "pin 28 "
 {% endhighlight %}
 
 
-{% highlight bash %}
+{% highlight bash linenos %}
 root@beaglebone:~# echo cape-universaln > /sys/devices/bone_capemgr.*/slots↩
 root@beaglebone:~# cat /sys/kernel/debug/pinctrl/44e10800.pinmux/pins | grep "pin 28 "↩
 pin 28 (44e10870) 00000037 pinctrl-single 
@@ -621,7 +621,7 @@ if __name__ == '__main__':
 * 服务器清洗数据
 * 服务器展示结果
 
-{% highlight bash %}
+{% highlight bash linenos %}
 root@yewei-prod-hk:~# tail -f /var/log/nginx/access.log | grep -i "/weather"↩
 123.120.42.45 - - [11/Jan/2016:04:11:15 +0000] "HEAD /weather HTTP/1.1" 404 0 "-" "2016-01-11T04:09:44.398996;21.00;20.00;3.055;"
 123.120.42.45 - - [11/Jan/2016:04:11:43 +0000] "HEAD /weather HTTP/1.1" 404 0 "-" "2016-01-11T04:10:14.928819;21.00;20.00;0.526;"
@@ -659,7 +659,7 @@ cat /var/log/nginx/access.log | grep -i "/weather" | cut -d'"' -f6 | cut -d';' -
 
 ## UART: E-E-c-c-h-h-o-o
 
-{% highlight bash %}
+{% highlight bash linenos %}
 root@beaglebone:~# ls /dev/ttyO*↩
 /dev/ttyO0
 root@beaglebone:~# ls /lib/firmware/*UART*↩
