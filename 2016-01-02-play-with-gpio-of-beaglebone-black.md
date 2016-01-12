@@ -622,7 +622,7 @@ if __name__ == '__main__':
 * 服务器展示结果
 
 {% highlight bash %}
-root@yewei-prod-hk:~# tail -f /var/log/nginx/access.log | grep -i "/weather"
+root@yewei-prod-hk:~# tail -f /var/log/nginx/access.log | grep -i "/weather"↩
 123.120.42.45 - - [11/Jan/2016:04:11:15 +0000] "HEAD /weather HTTP/1.1" 404 0 "-" "2016-01-11T04:09:44.398996;21.00;20.00;3.055;"
 123.120.42.45 - - [11/Jan/2016:04:11:43 +0000] "HEAD /weather HTTP/1.1" 404 0 "-" "2016-01-11T04:10:14.928819;21.00;20.00;0.526;"
 123.120.42.45 - - [11/Jan/2016:04:12:19 +0000] "HEAD /weather HTTP/1.1" 404 0 "-" "2016-01-11T04:10:45.458968;21.00;20.00;5.581;"
@@ -631,4 +631,26 @@ root@yewei-prod-hk:~# tail -f /var/log/nginx/access.log | grep -i "/weather"
 123.120.42.45 - - [11/Jan/2016:04:13:46 +0000] "HEAD /weather HTTP/1.1" 404 0 "-" "2016-01-11T04:12:17.054274;21.00;20.00;0.526;"
 123.120.42.45 - - [11/Jan/2016:04:14:16 +0000] "HEAD /weather HTTP/1.1" 404 0 "-" "2016-01-11T04:12:47.584879;21.00;20.00;0.527;"
 {% endhighlight %}
+
+
+{% highlight bash %}
+cat /var/log/nginx/access.log | grep -i "/weather" | cut -d'"' -f6 | cut -d';' -f1-3 --output-delimiter=',' | sort > temp_humid.csv
+{% endhighlight %}
+
+{% highlight text %}
+2016-01-12T04:56:07.936775,19.00,21.00
+2016-01-12T04:56:38.468112,19.00,21.00
+2016-01-12T04:57:09.001872,19.00,21.00
+2016-01-12T04:57:39.532041,18.00,22.00
+2016-01-12T04:58:10.062362,18.00,22.00
+2016-01-12T04:58:40.595329,18.00,22.00
+{% endhighlight %}
+
+更多在线数据存储、处理、展示的选项：
+
+* Carriots <https://www.carriots.com/>
+* ioBridge <https://www.iobridge.com/>
+* ThingSpeak <https://thingspeak.com/>
+* XOBXOB <http://www.xobxob.com/>
+* SensorCloud <http://www.sensorcloud.com/>
 
