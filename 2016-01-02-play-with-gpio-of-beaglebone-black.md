@@ -697,3 +697,74 @@ hheelllloo,,  wwoorrlldd!!
                                                                                                                    
 {% endhighlight %}
 
+
+## Sensor Specification
+
+* 说明传感器插线方法
+* 传感器接线
+* 传感器数据说明
+
+## First Attempt
+
+{% highlight python %}
+#!/usr/bin/env python
+
+from serial import Serial
+from os import system
+
+system("echo BB-UART4 > /sys/devices/bone_capemgr.9/slots")
+system("ls /dev/ttyO*")
+
+port = Serial('/dev/ttyO4', baudrate=9600, timeout=2.0)
+
+def read_message():
+    raw_bytes = port.read(32)
+    raw_values = [ ord(raw_char) for raw_char in raw_bytes ]
+    for index, raw_value in enumerate(raw_values):
+        if index % 2 == 1:
+            real_value = raw_value + (previous_value << 8)
+            suffix_string = "{0:6d}".format(real_value)
+        else:
+            previous_value = raw_value
+            suffix_string = ""
+        print "{0:02d} : {1:02x} | {1:3d} | {2:s}".format(index + 1, raw_value, suffix_string)
+
+read_message()
+{% endhighlight %}
+
+{% highlight text %}
+/dev/ttyO0  /dev/ttyO4
+01 : 42 |  66 | 
+02 : 4d |  77 |  16973
+03 : 00 |   0 | 
+04 : 1c |  28 |     28
+05 : 00 |   0 | 
+06 : 19 |  25 |     25
+07 : 00 |   0 | 
+08 : 20 |  32 |     32
+09 : 00 |   0 | 
+10 : 24 |  36 |     36
+11 : 00 |   0 | 
+12 : 17 |  23 |     23
+13 : 00 |   0 | 
+14 : 1f |  31 |     31
+15 : 00 |   0 | 
+16 : 24 |  36 |     36
+17 : 0f |  15 | 
+18 : 93 | 147 |   3987
+19 : 04 |   4 | 
+20 : 5b |  91 |   1115
+21 : 00 |   0 | 
+22 : a9 | 169 |    169
+23 : 00 |   0 | 
+24 : 0c |  12 |     12
+25 : 00 |   0 | 
+26 : 00 |   0 |      0
+27 : 00 |   0 | 
+28 : 00 |   0 |      0
+29 : 71 | 113 | 
+30 : 00 |   0 |  28928
+31 : 03 |   3 | 
+32 : 89 | 137 |    905
+{% endhighlight %}
+
