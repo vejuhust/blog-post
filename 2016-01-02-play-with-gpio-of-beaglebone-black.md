@@ -632,7 +632,6 @@ root@yewei-prod-hk:~# tail -f /var/log/nginx/access.log | grep -i "/weather"↩
 123.120.42.45 - - [11/Jan/2016:04:14:16 +0000] "HEAD /weather HTTP/1.1" 404 0 "-" "2016-01-11T04:12:47.584879;21.00;20.00;0.527;"
 {% endhighlight %}
 
-
 {% highlight bash %}
 cat /var/log/nginx/access.log | grep -i "/weather" | cut -d'"' -f6 | cut -d';' -f1-3 --output-delimiter=',' | sort > temp_humid.csv
 {% endhighlight %}
@@ -704,6 +703,7 @@ hheelllloo,,  wwoorrlldd!!
 * 传感器接线
 * 传感器数据说明
 
+
 ## First Attempt
 
 {% highlight python %}
@@ -766,5 +766,84 @@ read_message()
 30 : 00 |   0 |  28928
 31 : 03 |   3 | 
 32 : 89 | 137 |    905
+{% endhighlight %}
+
+
+## Serious Implementation
+
+* UART初始化
+* struct的unpack来读取数据
+
+{% highlight python %}
+#!/usr/bin/env python
+
+from Adafruit_BBIO import UART
+from serial import Serial
+from time import sleep
+from struct import unpack
+from sys import exit
+from os import _exit
+
+uart_number = 4
+message_length = 32
+baud_rate = 9600
+read_timeout_sec = 3
+read_interval_sec = 0.5
+
+def decode_message(raw_bytes):
+    # Unpack data from message
+    data_format = ">" + "H" * (message_length >> 1)
+    data_list = unpack(data_format, raw_bytes)
+    [ header, _, 
+      tsi_pm10_ugm, tsi_pm25_ugm, tsi_pm100_ugm, 
+      std_pm10_ugm, std_pm25_ugm, std_pm100_ugm, 
+      cnt_pd_3um, cnt_pd_5um, cnt_pd_10um, cnt_pd_25um, cnt_pd_50um, cnt_pd_100um,
+      _, checksum ] = data_list
+    # Compute checksum
+    check_format = ">" + "B" * (message_length - 2) + "xx"
+    check_list = unpack(check_format, raw_bytes)
+    # Publish
+    if header == 0x424d and checksum == sum(value for value in check_list):
+        print data_list
+    else:
+        print "failed to validate"
+
+def read_device(serial_device):
+    # Check if device is open for read
+    while not serial_device.is_open:
+        serial_device.open()
+    print "device %s is open" % serial_device.name
+    # Read and decode messages from device
+    while True:
+        bytes_count = serial_device.in_waiting
+        while bytes_count >= message_length:
+            message_bytes = serial_device.read(message_length)
+            decode_message(message_bytes)
+            bytes_count -= message_length
+        sleep(read_interval_sec)
+
+if __name__ == '__main__':
+    UART.setup("UART%d" % uart_number)
+    serial_device = Serial("/dev/ttyO%d" % uart_number, baudrate=baud_rate, timeout=read_timeout_sec)    
+    try:
+        read_device(serial_device)
+    except KeyboardInterrupt:
+        serial_device.close()
+        print 'goodbye!'
+        try:
+            exit(0)
+        except SystemExit:
+            _exit(0)
+{% endhighlight %}
+
+{% highlight text %}
+device /dev/ttyO4 is open
+(16973, 28, 45, 60, 73, 32, 46, 61, 7047, 2000, 320, 36, 12, 8, 28928, 1099)
+(16973, 28, 45, 60, 72, 32, 46, 61, 7092, 2004, 318, 32, 10, 6, 28928, 1137)
+(16973, 28, 46, 61, 73, 33, 46, 61, 7197, 2026, 303, 34, 10, 6, 28928, 1000)
+(16973, 28, 45, 60, 72, 32, 46, 61, 7080, 1985, 310, 34, 10, 6, 28928, 1100)
+(16973, 28, 44, 59, 71, 32, 45, 60, 7008, 1962, 304, 36, 10, 6, 28928, 996)
+(16973, 28, 43, 59, 69, 31, 45, 59, 6861, 1911, 310, 36, 6, 4, 28928, 1048)
+^Cgoodbye!
 {% endhighlight %}
 
