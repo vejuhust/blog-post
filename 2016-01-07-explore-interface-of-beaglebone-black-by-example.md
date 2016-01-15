@@ -738,6 +738,16 @@ device /dev/ttyO4 is open
 
 
 
-# 继电器
+# 继电器 Relay
 
 
+
+# 实时时钟 Real Time Clock
+
+
+
+# 七段数码管 Seven-Segment Indicator
+
+
+
+# 电位器 Potentiometer
