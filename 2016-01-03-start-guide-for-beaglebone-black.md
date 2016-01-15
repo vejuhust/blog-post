@@ -1,9 +1,9 @@
 ---
 layout: post
-title: Explore Interface of BeagleBone Black by Example
-excerpt: "My incomplete programming guide to play with hardware on BBB"
-modified: 2016-01-02
-tags: [coding, programming, beaglebone, hardware]
+title: Start Guide for BeagleBone Black
+excerpt: "My notes to set up development environment on BBB"
+modified: 2016-01-03
+tags: [beaglebone, hardware]
 comments: true
 ---
 
