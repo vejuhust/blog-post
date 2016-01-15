@@ -2,7 +2,7 @@
 layout: post
 title: Explore Interface of BeagleBone Black by Example
 excerpt: "My incomplete programming guide to play with hardware on BBB"
-modified: 2016-01-02
+modified: 2016-01-07
 tags: [coding, programming, beaglebone, hardware]
 comments: true
 ---
@@ -14,8 +14,14 @@ BeagleBone Black (a.k.a. BBB)
 
 
 
-# GPIO Pins
+# Headers
 
+## 总体概况
+
+* 模式介绍
+* pdf文件
+
+## GPIO
 * GPIO的插图
 * 几种GPIO名称的读法
 
@@ -413,6 +419,10 @@ run(setup, loop)
 
 
 
+# 电位器
+
+
+
 # Humidity Sensor
 
 ## Hardware
@@ -499,6 +509,10 @@ cat /var/log/nginx/access.log | grep -i "/weather" | cut -d'"' -f6 | cut -d';' -
 * ThingSpeak <https://thingspeak.com/>
 * XOBXOB <http://www.xobxob.com/>
 * SensorCloud <http://www.sensorcloud.com/>
+
+
+## 升级硬件
+
 
 
 # PM2.5 Sensor
@@ -693,4 +707,37 @@ device /dev/ttyO4 is open
 (16973, 28, 43, 59, 69, 31, 45, 59, 6861, 1911, 310, 36, 6, 4, 28928, 1048)
 ^Cgoodbye!
 {% endhighlight %}
+
+
+
+# LCD
+
+## 芯片及接线
+
+## GPIO插线方法
+
+## I2C转换方法
+
+## USB转换方法
+
+
+
+# 发声
+
+
+
+# 收声
+
+
+
+# 活人
+
+
+
+# 光强
+
+
+
+# 继电器
+
 
