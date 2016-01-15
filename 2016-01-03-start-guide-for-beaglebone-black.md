@@ -12,13 +12,10 @@ comments: true
 
 BeagleBone Black (a.k.a. BBB)
 
-
-# Prepare the Board
-
 在进一步实验之前，需要先准备好BBB的配件以及microSD卡。
 
 
-## Accessories for BBB
+# Accessories
 
 如果选择以太网口连接BBB的话，网线之外，以下二者选其一用于供电：
 
@@ -35,7 +32,8 @@ BeagleBone Black (a.k.a. BBB)
 * 键鼠套装 - 如果需要直接作为桌面机器使用
 
 
-## Install Debian on microSD Card
+
+# Install Debian on microSD Card
 
 BBB自带的eMMC中载有Ångström或Debian系统，如果不满足于eMMC的容量或者想使用其他操作系统，我们需要将其写入microSD卡。
 
@@ -85,7 +83,9 @@ sudo diskutil eject /dev/rdisk9
 
 取出microSD卡并插入关机状态的BBB中，按住Boot Switch按钮并通电开机，当BBB上的两个蓝色LED点亮时松开即可。/* 在我的BBB上，不按按钮也能正确从microSD卡加载系统。 */查询到BBB的IP地址，用SSH直接登陆，默认的用户名是`debian`，密码是`temppwd`。登陆后记得使用`passwd`命令修改。
 
-## Expand File System Partition
+
+
+# Expand File System Partition
 
 如果使用的microSD卡不止4GB，那么我们需要在BBB上调整它的分区表来充分利用剩余的空间。用`fdisk`的操作记录如下，输入部分均用`↩︎`标出：
 
@@ -164,5 +164,21 @@ tmpfs           249M     0  249M   0% /sys/fs/cgroup
 tmpfs           5.0M     0  5.0M   0% /run/lock
 tmpfs           100M     0  100M   0% /run/user
 {% endhighlight %}
+
+
+
+# 报告IP信息
+
+
+
+# 桌面使用
+
+
+
+# 软件安装
+
+
+
+# 社区资料
 
 
