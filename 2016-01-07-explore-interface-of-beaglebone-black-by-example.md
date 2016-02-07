@@ -166,130 +166,7 @@ GPIO.cleanup()
 
 
 
-# Read the Button
-
-
-## Pull-Up Resistor
-
-* 搭建按钮
-* 引入上拉概念
-
-{% highlight bash %}
-#!/bin/bash
-
-GPIO_NUM=61 # has an internal pull-up resistor by default
-
-echo "$GPIO_NUM" > /sys/class/gpio/export
-printf "pin = gpio_%d\n" "$GPIO_NUM"
-
-echo in > /sys/class/gpio/gpio"$GPIO_NUM"/direction
-printf "direction = %s\n" $(cat /sys/class/gpio/gpio"$GPIO_NUM"/direction)
-
-while [ 1 ]; do
-    printf "[%s] input = %s\n" $(date '+%H:%M:%S.%N') $(cat /sys/class/gpio/gpio"$GPIO_NUM"/value)
-    sleep 0.5
-done
-{% endhighlight %}
-
-
-## Pull-Down Resistor
-
-* 引入下拉概念
-
-{% highlight bash %}
-#!/bin/bash
-
-GPIO_NUM=44 # has an internal pull-down resistor by default
-
-echo "$GPIO_NUM" > /sys/class/gpio/export
-printf "pin = gpio_%d\n" "$GPIO_NUM"
-
-echo in > /sys/class/gpio/gpio"$GPIO_NUM"/direction
-printf "direction = %s\n" $(cat /sys/class/gpio/gpio"$GPIO_NUM"/direction)
-
-while [ 1 ]; do
-    printf "[%s] input = %s\n" $(date '+%H:%M:%S.%N') $(cat /sys/class/gpio/gpio"$GPIO_NUM"/value)
-    sleep 0.5
-done
-{% endhighlight %}
-
-
-## Internal Pull-Up/Down Resistors
-
-* 引入BBB内部上拉/下拉电路
-* 考虑外部上拉/下拉电路与内部上拉/下拉相冲突的情况
-* 外下拉内上拉，全部输出是1：下拉接9.11
-* 外上拉内下拉，工作正常：上拉接9.23
-
-{% highlight bash %}
-#!/bin/bash
-
-GPIO_NUM=30 # config-pin P9_11 in -> pin 28 (44e10870) 0000002f pinctrl-single 
-
-echo "$GPIO_NUM" > /sys/class/gpio/export
-printf "pin = gpio_%d\n" "$GPIO_NUM"
-
-echo in > /sys/class/gpio/gpio"$GPIO_NUM"/direction
-printf "direction = %s\n" $(cat /sys/class/gpio/gpio"$GPIO_NUM"/direction)
-
-while [ 1 ]; do
-    printf "[%s] input = %s\n" $(date '+%H:%M:%S.%N') $(cat /sys/class/gpio/gpio"$GPIO_NUM"/value)
-    sleep 0.5
-done
-{% endhighlight %}
-
-
-## Configure GPIO Pins
-
-* pinmux设置法
-* device tree概念
-* 设置工具config-pin
-* 下拉接9.11的修复：P9\_11 in 或 P9\_11 in-
-
-{% highlight bash %}
-echo cape-universaln > /sys/devices/bone_capemgr.*/slots
-cat /sys/kernel/debug/pinctrl/44e10800.pinmux/pins | grep "pin 28 "
-config-pin P9_11 in
-cat /sys/kernel/debug/pinctrl/44e10800.pinmux/pins | grep "pin 28 "
-{% endhighlight %}
-
-
-{% highlight bash linenos %}
-root@beaglebone:~# echo cape-universaln > /sys/devices/bone_capemgr.*/slots↩
-root@beaglebone:~# cat /sys/kernel/debug/pinctrl/44e10800.pinmux/pins | grep "pin 28 "↩
-pin 28 (44e10870) 00000037 pinctrl-single 
-root@beaglebone:~# /var/lib/cloud9/press-button.sh↩
-/var/lib/cloud9/press-button.sh: line 7: echo: write error: Device or resource busy
-pin = gpio_30
-direction = in
-[18:22:21.852837181] input = 1
-[18:22:22.408367889] input = 1
-[18:22:22.963011931] input = 1
-[18:22:23.518651889] input = 1
-[18:22:24.074203556] input = 1
-[18:22:24.629658348] input = 1
-^C
-root@beaglebone:~# config-pin P9_11 in↩
-root@beaglebone:~# cat /sys/kernel/debug/pinctrl/44e10800.pinmux/pins | grep "pin 28 "↩
-pin 28 (44e10870) 0000002f pinctrl-single 
-root@beaglebone:~# /var/lib/cloud9/press-button.sh↩
-/var/lib/cloud9/press-button.sh: line 7: echo: write error: Device or resource busy
-pin = gpio_30
-direction = in
-[18:23:01.462888810] input = 0
-[18:23:02.026213727] input = 0
-[18:23:02.581415311] input = 1
-[18:23:03.136452436] input = 0
-[18:23:03.691387311] input = 0
-[18:23:04.247814727] input = 1
-[18:23:04.805659769] input = 0
-^C
-root@beaglebone:~# 
-{% endhighlight %}
-
-
-
-# Turn on the LED
+# Light the LED
 
 ## Push Switch by Polling
 
@@ -428,7 +305,163 @@ run(setup, loop)
 
 
 
-# 电位器
+
+# Dim the LED
+
+
+
+
+# Read the Button
+
+
+## Pull-Up Resistor
+
+* 搭建按钮
+* 引入上拉概念
+
+{% highlight bash %}
+#!/bin/bash
+
+GPIO_NUM=61 # has an internal pull-up resistor by default
+
+echo "$GPIO_NUM" > /sys/class/gpio/export
+printf "pin = gpio_%d\n" "$GPIO_NUM"
+
+echo in > /sys/class/gpio/gpio"$GPIO_NUM"/direction
+printf "direction = %s\n" $(cat /sys/class/gpio/gpio"$GPIO_NUM"/direction)
+
+while [ 1 ]; do
+    printf "[%s] input = %s\n" $(date '+%H:%M:%S.%N') $(cat /sys/class/gpio/gpio"$GPIO_NUM"/value)
+    sleep 0.5
+done
+{% endhighlight %}
+
+
+## Pull-Down Resistor
+
+* 引入下拉概念
+
+{% highlight bash %}
+#!/bin/bash
+
+GPIO_NUM=44 # has an internal pull-down resistor by default
+
+echo "$GPIO_NUM" > /sys/class/gpio/export
+printf "pin = gpio_%d\n" "$GPIO_NUM"
+
+echo in > /sys/class/gpio/gpio"$GPIO_NUM"/direction
+printf "direction = %s\n" $(cat /sys/class/gpio/gpio"$GPIO_NUM"/direction)
+
+while [ 1 ]; do
+    printf "[%s] input = %s\n" $(date '+%H:%M:%S.%N') $(cat /sys/class/gpio/gpio"$GPIO_NUM"/value)
+    sleep 0.5
+done
+{% endhighlight %}
+
+
+## Internal Pull-Up/Down Resistors
+
+* 引入BBB内部上拉/下拉电路
+* 考虑外部上拉/下拉电路与内部上拉/下拉相冲突的情况
+* 外下拉内上拉，全部输出是1：下拉接9.11
+* 外上拉内下拉，工作正常：上拉接9.23
+
+{% highlight bash %}
+#!/bin/bash
+
+GPIO_NUM=30 # config-pin P9_11 in -> pin 28 (44e10870) 0000002f pinctrl-single 
+
+echo "$GPIO_NUM" > /sys/class/gpio/export
+printf "pin = gpio_%d\n" "$GPIO_NUM"
+
+echo in > /sys/class/gpio/gpio"$GPIO_NUM"/direction
+printf "direction = %s\n" $(cat /sys/class/gpio/gpio"$GPIO_NUM"/direction)
+
+while [ 1 ]; do
+    printf "[%s] input = %s\n" $(date '+%H:%M:%S.%N') $(cat /sys/class/gpio/gpio"$GPIO_NUM"/value)
+    sleep 0.5
+done
+{% endhighlight %}
+
+
+## Configure GPIO Pins
+
+* pinmux设置法
+* device tree概念
+* 设置工具config-pin
+* 下拉接9.11的修复：P9\_11 in 或 P9\_11 in-
+
+{% highlight bash %}
+echo cape-universaln > /sys/devices/bone_capemgr.*/slots
+cat /sys/kernel/debug/pinctrl/44e10800.pinmux/pins | grep "pin 28 "
+config-pin P9_11 in
+cat /sys/kernel/debug/pinctrl/44e10800.pinmux/pins | grep "pin 28 "
+{% endhighlight %}
+
+
+{% highlight bash linenos %}
+root@beaglebone:~# echo cape-universaln > /sys/devices/bone_capemgr.*/slots↩
+root@beaglebone:~# cat /sys/kernel/debug/pinctrl/44e10800.pinmux/pins | grep "pin 28 "↩
+pin 28 (44e10870) 00000037 pinctrl-single 
+root@beaglebone:~# /var/lib/cloud9/press-button.sh↩
+/var/lib/cloud9/press-button.sh: line 7: echo: write error: Device or resource busy
+pin = gpio_30
+direction = in
+[18:22:21.852837181] input = 1
+[18:22:22.408367889] input = 1
+[18:22:22.963011931] input = 1
+[18:22:23.518651889] input = 1
+[18:22:24.074203556] input = 1
+[18:22:24.629658348] input = 1
+^C
+root@beaglebone:~# config-pin P9_11 in↩
+root@beaglebone:~# cat /sys/kernel/debug/pinctrl/44e10800.pinmux/pins | grep "pin 28 "↩
+pin 28 (44e10870) 0000002f pinctrl-single 
+root@beaglebone:~# /var/lib/cloud9/press-button.sh↩
+/var/lib/cloud9/press-button.sh: line 7: echo: write error: Device or resource busy
+pin = gpio_30
+direction = in
+[18:23:01.462888810] input = 0
+[18:23:02.026213727] input = 0
+[18:23:02.581415311] input = 1
+[18:23:03.136452436] input = 0
+[18:23:03.691387311] input = 0
+[18:23:04.247814727] input = 1
+[18:23:04.805659769] input = 0
+^C
+root@beaglebone:~# 
+{% endhighlight %}
+
+
+
+
+# 电位器 Potentiometer
+
+
+
+
+# 发声 Buzzer
+
+
+
+
+# 收声 Microphone
+
+
+
+
+# 活人 Human Proximity Sensor
+
+
+
+
+# 光强 Digital Light Sensor 
+
+
+
+
+# 继电器 Relay
+
 
 
 
@@ -719,6 +752,13 @@ device /dev/ttyO4 is open
 
 
 
+
+# 七段数码管 Seven-Segment Display
+
+
+
+
+
 # LCD
 
 ## 芯片及接口
@@ -766,32 +806,7 @@ lcd.move_right()
 
 
 
-# 发声
-
-
-
-# 收声
-
-
-
-# 活人
-
-
-
-# 光强
-
-
-
-# 继电器 Relay
-
-
 
 # 实时时钟 Real Time Clock
 
 
-
-# 七段数码管 Seven-Segment Indicator
-
-
-
-# 电位器 Potentiometer
