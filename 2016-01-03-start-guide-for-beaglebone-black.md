@@ -169,6 +169,14 @@ tmpfs           100M     0  100M   0% /run/user
 
 # WiFi设置
 
+* 设置方法
+* 性能测试
+
+## Tenda W311MI
+
+## Netgear WNA1000Mv2
+
+## Netgear WNA3100M
 
 
 # 报告IP信息
