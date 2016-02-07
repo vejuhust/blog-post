@@ -181,6 +181,29 @@ tmpfs           100M     0  100M   0% /run/user
 
 # 报告IP信息
 
+{% highlight bash %}
+* * * * * curl -G "https://dweet.io/dweet/for/wei-home-bbb" --data-urlencode "ifconfig=$(/sbin/ifconfig | grep eth0 -A 1 | tail -1 | cut -d':' -f2 | cut -d' ' -f1)" --data-urlencode "uptime=$(uptime | cut -d',' -f1,2)" >/dev/null 2>&1
+{% endhighlight %}
+
+
+{% highlight javascript %}
+{
+    "this": "succeeded",
+    "by": "dweeting",
+    "the": "dweet",
+    "with": {
+        "thing": "wei-air-mac",
+        "created": "2016-02-07T10:05:00.114Z",
+        "content": {
+            "ifconfig": "192.168.1.106",
+            "uptime": "18:04  up 52 mins, 3 users"
+        }
+    }
+}
+{% endhighlight %}
+
+
+
 
 
 # 桌面使用
