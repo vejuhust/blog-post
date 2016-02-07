@@ -192,11 +192,11 @@ tmpfs           100M     0  100M   0% /run/user
     "by": "dweeting",
     "the": "dweet",
     "with": {
-        "thing": "wei-air-mac",
-        "created": "2016-02-07T10:05:00.114Z",
+        "thing": "wei-home-bbb",
+        "created": "2016-02-07T14:07:46.265Z",
         "content": {
-            "ifconfig": "192.168.1.106",
-            "uptime": "18:04  up 52 mins, 3 users"
+            "ifconfig": "192.168.1.101",
+            "uptime": " 14:07:40 up  1:08,  2 users"
         }
     }
 }
