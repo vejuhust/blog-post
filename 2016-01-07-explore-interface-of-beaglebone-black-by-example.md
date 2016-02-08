@@ -18,37 +18,36 @@ comments: true
 
 
 
-# Tips :thought_balloon:
+# :bookmark: Tips 
 
-如果说在硬件上的摸索能给一位软件工程师带来什么经验的话，或许就是以下几条了：
+作为一名软件工程师，在这几周探索的过程中如果说有什么经验教训的话，或许就是以下这几条了：
 
-1. 小心静电。     
-2. 通电之前检查连线，检查，检查，再检查！     
-3. 仔细阅读正确的datasheet。     
-4. [StackOverflow](http://electronics.stackexchange.com/)并不是万能的。     
-5. 与追着log去debug软件相比，硬件是麻烦而痛苦。     
+1. 小心静电，断电连线。
+2. 仔细阅读正确的datasheet。
+3. 通电之前检查连线，检查，检查，再检查！
+
+重要的事情说三遍，第三条是非常重要的。在软件开发领域，大多数时候运行程序之前我们并不会刻意检查正确性，因为试错的成本非常之低，重新再运行一遍也不过几秒钟到几分钟的事情。而在硬件领域则不大相同，错误的连线可能会烧毁设备，带来时间和金钱上可观的损失。
 
 
 
-# Headers
+# :dog: Headers
 
 * 模式介绍
 * pdf文件
 
 
 
-
-# GPIO
+# :on: GPIO
 
 * GPIO的插图
 * 几种GPIO名称的读法
 
 
 
-# Table of Contents
+# :notebook: Table of Contents
 
 
 
-# Resource
+# :floppy_disk: Resource 
 
 
