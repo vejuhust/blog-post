@@ -101,8 +101,10 @@ General-Purpose Input/Output (a.k.a. GPIO)顾名思义就是通用型的输入�
 
 * [BeagleBoard.org](http://beagleboard.org/black): 官方网站，有各类资源的索引
 * [eLinux.org](http://www.elinux.org/Beagleboard:BeagleBoneBlack): 官方wiki页面，有技术资料的索引
+* [Texas Instruments](http://www.ti.com/tool/BEAGLEBK): TI的产品介绍页面，有购买方式和文档的索引
+* [CircuitCo](https://github.com/CircuitCo/BeagleBone-Black/): 制造商开源的BBB及扩展板的硬件资料
 * [Adafruit](https://learn.adafruit.com/category/beaglebone): 良心企业，不仅仅是卖板子，还是布道师
 * [Adafruit@GitHub](https://github.com/adafruit/): Adafruit开发的各类库的源代码
 * [Fritzing](http://fritzing.org/): 开源的电子设计工具，从面包板到PCB都可以画
-* [Getting Started with BeagleBone](http://shop.oreilly.com/product/0636920028116.do): Matt Richardson写的BBB入门教程，以Python为主，轻松简单，GPIO有涉及但不深入
-* [Exploring BeagleBone](http://as.wiley.com/WileyCDA/WileyTitle/productCd-1118935128,subjectCd-CM43.html): Derek Molloy的全面教程，基于C++，内容深入浅出，还有[配套网站](http://exploringbeaglebone.com/)
+* [Getting Started with BeagleBone](http://shop.oreilly.com/product/0636920028116.do): Matt Richardson写的入门教程，以Python为主，轻松简单，GPIO有涉及但不深入
+* [Exploring BeagleBone](http://as.wiley.com/WileyCDA/WileyTitle/productCd-1118935128,subjectCd-CM43.html): Derek Molloy写的全面教程，基于C++，内容深入浅出，还有[配套网站](http://exploringbeaglebone.com/)
