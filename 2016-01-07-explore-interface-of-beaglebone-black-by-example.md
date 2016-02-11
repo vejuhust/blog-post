@@ -32,9 +32,30 @@ comments: true
 
 # :dog: Headers
 
-* 模式介绍
-* pdf文件
+<figure>
+  <a href="/images/photo/beaglebone/bbb-front-back.jpg">
+    <img src="/images/photo/beaglebone/bbb-front-back.jpg" alt="Front & Back of BeagleBone Black">
+  </a>
+</figure>
 
+如上图所示，BBB提供了以太网、USB等多种接口，我们所关注的是标注为**7**的扩展接口(Expansion Headers)。左边称为**P9**，右边为**P8**，各有46个插脚口(pin)，编号从左到右从上到下。提供8种模式(mode)，支持以下通讯协议：
+
+* GPIO
+* ADC
+* UART
+* I2C
+* SPI
+
+电气参数方面：
+
+* GPIO口的电压为3.3V
+  - 最大输入大约为8mA
+  - 最大输出为4-6mA
+* VDD口的输出电压为3.3V或5V
+  - 3.3V插脚口最大输出电流为250mA
+  - 5V插脚口最大输出电流为1A
+  - 5V插脚口仅在电源适配器供电的情况下可以使用
+* ADC口的电压为1.8V
 
 
 # :on: GPIO
