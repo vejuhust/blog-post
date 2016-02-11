@@ -67,23 +67,23 @@ General-Purpose Input/Output (a.k.a. GPIO)顾名思义就是通用型的输入�
 
 | Header Pin | GPIO Name | Signal Name | Kernal Pin |
 |:----------:|:---------:|:-----------:|:----------:|
-| P8\_12      | GPIO1\_12 | 44          | 12         |
-| P9\_11      | GPIO0\_30 | 30          | 28         |
-| P9\_27      | GPIO3\_19 | 115         | 105        |
+| P8\_12     | GPIO1\_12 | 44          | 12         |
+| P9\_11     | GPIO0\_30 | 30          | 28         |
+| P9\_27     | GPIO3\_19 | 115         | 105        |
 | USR0       | GPIO1\_21 | 53          | 21         |
 {: rules="groups"}
 
 具体含义如下：
 
 * Header Pin:
-  - P8_12表示右边P8上的12号pin脚。
-  - USR0表示以太网口右边四枚LED中最右边的那枚。
-* GPIO Name: GPIO0\_30表示AM335x上0号GPIO控制芯片中偏移量为30的pin脚。
-* Signal Name: 用于Linux，可以由GPIO Name计算而得。
+  - P8_12表示右边P8上的12号pin脚
+  - USR0表示以太网口右边四枚LED中最右边的那枚
+* GPIO Name: GPIO0\_30表示AM335x上0号GPIO控制芯片中偏移量为30的pin脚
+* Signal Name: 用于Linux，可以由GPIO Name计算而得
   - 以GPIO1\_12为例，算得: 1*32+12=44
   - 以Bash为例，可直接使用: `echo 66 > /sys/class/gpio/export`
-* Kernal Pin: Linux内核中表示pin脚的方法，常用于Device Tree相关。
-  - 通过`cat /sys/kernel/debug/pinctrl/44e10800.pinmux/pins`可以查看所有状态。
+* Kernal Pin: Linux内核中表示pin脚的方法，常用于Device Tree相关
+  - 通过`cat /sys/kernel/debug/pinctrl/44e10800.pinmux/pins`可以查看所有状态
 
 <figure>
   <a href="/images/photo/beaglebone/bbb-pin-default.png">
@@ -99,4 +99,10 @@ General-Purpose Input/Output (a.k.a. GPIO)顾名思义就是通用型的输入�
 
 # :floppy_disk: Resource 
 
-
+* [BeagleBoard.org](http://beagleboard.org/black): 官方网站，有各类资源的索引
+* [eLinux.org](http://www.elinux.org/Beagleboard:BeagleBoneBlack): 官方wiki页面，有技术资料的索引
+* [Adafruit](https://learn.adafruit.com/category/beaglebone): 良心企业，不仅仅是卖板子，还是布道师
+* [Adafruit@GitHub](https://github.com/adafruit/): Adafruit开发的各类库的源代码
+* [Fritzing](http://fritzing.org/): 开源的电子设计工具，从面包板到PCB都可以画
+* [Getting Started with BeagleBone](http://shop.oreilly.com/product/0636920028116.do): Matt Richardson写的BBB入门教程，以Python为主，轻松简单，GPIO有涉及但不深入
+* [Exploring BeagleBone](http://as.wiley.com/WileyCDA/WileyTitle/productCd-1118935128,subjectCd-CM43.html): Derek Molloy的全面教程，基于C++，内容深入浅出，还有[配套网站](http://exploringbeaglebone.com/)
