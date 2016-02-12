@@ -14,7 +14,7 @@ comments: true
 
 本系列文章就以多个小实验的实现来探讨如何通过BBB来操作各类设备的。但这并不是一套完整的教程，而更像是独立探索时写下的笔记。
 
-本文作为第一篇主要介绍基本概念，并作为后续文章的目录。
+本文作为第一篇主要介绍基本概念，并作为后续文章的目录。关于新入手的BBB如何安装、设置请参考[Start Guide for BeagleBone Black](http://yewei.io/)一文。
 
 
 
@@ -61,7 +61,7 @@ comments: true
 
 # :on: GPIO
 
-General-Purpose Input/Output (a.k.a. GPIO)顾名思义就是通用型的输入输出端口，可以提供基本数字信号的输入和输出。它是BBB扩展接口中各个pin脚8种工作模式的一种，下图列出了各个pin脚默认的工作模式(不同操作系统之间可能有差异)，更详细的内容可以参考[Derek Molloy制作的表格](https://github.com/vejuhust/beagle-code)。
+General-Purpose Input/Output (a.k.a. GPIO)顾名思义就是通用型的输入输出端口，可以提供基本数字信号的输入和输出。它是BBB扩展接口中各个pin脚8种工作模式的一种，下图列出了各个pin脚默认的工作模式(不同操作系统之间可能有差异)，更详细的内容可以参考[Derek Molloy制作的表格](https://github.com/vejuhust/beagle-code/tree/master/datasheet/beaglebone-black)。
 
 对于BBB上的具体pin脚，常见的有四种方式指代，例如：
 
@@ -102,7 +102,7 @@ General-Purpose Input/Output (a.k.a. GPIO)顾名思义就是通用型的输入�
 * [BeagleBoard.org](http://beagleboard.org/black): 官方网站，有各类资源的索引
 * [eLinux.org](http://www.elinux.org/Beagleboard:BeagleBoneBlack): 官方wiki页面，有技术资料的索引
 * [Texas Instruments](http://www.ti.com/tool/BEAGLEBK): TI的产品介绍页面，有购买方式和文档的索引
-* [CircuitCo](https://github.com/CircuitCo/BeagleBone-Black/): 制造商开源的BBB及扩展板的硬件资料
+* [CircuitCo@GitHub](https://github.com/CircuitCo/BeagleBone-Black/): 制造商开源的BBB及扩展板的硬件资料
 * [Adafruit](https://learn.adafruit.com/category/beaglebone): 良心企业，不仅仅是卖板子，还是布道师
 * [Adafruit@GitHub](https://github.com/adafruit/): Adafruit开发的各类库的源代码
 * [Fritzing](http://fritzing.org/): 开源的电子设计工具，从面包板到PCB都可以画
