@@ -10,18 +10,44 @@ comments: true
 {% include _toc.html %}
 
 
+* LED的特性和作用
 
 
 # Blink On-Board LED
 
 ## On-Board LED
 
-* USR0 LED插图
+* LED插图
+* 各LED作用
 
+<figure>
+  <a href="/images/photo/beaglebone/bbb-onboard-led.png">
+    <img src="/images/photo/beaglebone/bbb-onboard-led.png" alt="Blah">
+  </a>
+</figure>
 
 ## Environment
 
-* 用BoneScript编写
+* 用浏览器登录
+
+<figure>
+  <a href="/images/photo/beaglebone/webportal-screen.png">
+    <img src="/images/photo/beaglebone/webportal-screen.png" alt="Blah">
+  </a>
+</figure>
+
+* 按提示打开Cloud9
+* 贴入脚本并运行，要有耐心
+
+<figure>
+  <a href="/images/photo/beaglebone/cloud9-screen.png">
+    <img src="/images/photo/beaglebone/cloud9-screen.png" alt="Blah">
+  </a>
+</figure>
+
+* BoneScript介绍
+* 代码修改
+* 验证环境没有问题
 
 {% highlight javascript %}
 var b = require('bonescript');
@@ -49,13 +75,22 @@ function toggle() {
 
 # Blink External LED
 
-* Hello World实验
+* 真正的Hello World实验
 
 
 ## Wiring
 
 * 实验器材
 * 电阻计算
+* 接线图
+
+<figure>
+  <a href="/images/photo/beaglebone/blink-led-fritzing.png">
+    <img src="/images/photo/beaglebone/blink-led-fritzing.png" alt="Blah">
+  </a>
+</figure>
+
+* 连接成功后的照片图
 
 
 ## Blink with Filesystem
