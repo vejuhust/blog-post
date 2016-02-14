@@ -10,21 +10,31 @@ comments: true
 {% include _toc.html %}
 
 
-* LED的特性和作用
+Light-Emitting Diode (a.k.a. LED)中文叫作发光二极管，是一种能发光的半导体电子元件，在近些年被普遍用作照明用途之前，曾主要用作指示灯及显示板。这次我们使用LED目的就是来指示电路是否正确的接通，堪称“Hello World”实验。
+
 
 
 # Blink On-Board LED
 
-## On-Board LED
+在使用扩展接口连接外部LED之前，我们先来探索一下BBB板载的LED，以确认开发环境正常。
 
-* LED插图
-* 各LED作用
+
+## On-Board LED
 
 <figure>
   <a href="/images/photo/beaglebone/bbb-onboard-led.png">
-    <img src="/images/photo/beaglebone/bbb-onboard-led.png" alt="Blah">
+    <img src="/images/photo/beaglebone/bbb-onboard-led.png" alt="On-Board LED of BeagleBone Black">
   </a>
 </figure>
+
+如上图所示，BBB板载有5枚蓝色LED，以太网口左边的是PWR，右边USR3到USR0依次排开。他们默认的作用如下：
+
+* PWR: BBB启动成功后会常亮；如果启动失败，BBB会在其闪烁后关机
+* USR0: 展示来自Linux内核的心跳包
+* USR1: 闪烁表示microSD卡是否正在被访问
+* USR2: 闪烁表示Linux内核没有处于idle状态
+* USR3: 闪烁表示板载eMMC是否正在被访问
+
 
 ## Environment
 
