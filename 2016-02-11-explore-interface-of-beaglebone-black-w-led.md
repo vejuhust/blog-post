@@ -188,10 +188,10 @@ while true; do echo 1 > activate; sleep 1; done
 
 LED正向导通时的电阻并不大，直接接线会有短路烧毁BBB的风险。GPIO端口的电压为3.3V，最大输出电流为6mA，我们需要给LED串联一个330Ω的电阻。具体接线步骤如下：
 
-1. 将BBB的P9_1端口与面包板的接地相连
+1. 将BBB的P9\_1端口与面包板的接地相连
 2. 将LED的负极(即短引脚)与面包板的接地相连
 3. 将LED的正极(即长引脚)与330Ω的电阻串联
-4. 将330Ω的电阻的另一端与BBB的P9_15端口相连
+4. 将330Ω的电阻的另一端与BBB的P9\_15端口相连
 
 <figure>
   <a href="/images/photo/beaglebone/blink-led-fritzing.png">
@@ -210,33 +210,80 @@ LED正向导通时的电阻并不大，直接接线会有短路烧毁BBB的风�
 
 ## Blink with Filesystem
 
-* 插线图
-* 命令行控制并解释
-* Bash脚本闪亮
+类似板载LED，我们可以通过文件系统来操作GPIO。首先，查看GPIO端口的开启状态：
 
-{% highlight bash %}
-# Check PIN status
-cat /sys/kernel/debug/gpio
+{% highlight bash linenos %}
+root@beaglebone:~# cat /sys/kernel/debug/gpio↩
+GPIOs 0-31, gpio:
+ gpio-6   (mmc_cd              ) in  lo
 
-ls /sys/class/gpio/
-echo 30 > /sys/class/gpio/export
+GPIOs 32-63, gpio:
+ gpio-52  (eMMC_RSTn           ) out lo
+ gpio-53  (beaglebone:green:usr) out lo
+ gpio-54  (beaglebone:green:usr) out lo
+ gpio-55  (beaglebone:green:usr) out hi
+ gpio-56  (beaglebone:green:usr) out lo
+ gpio-59  (McASP Clock Enable P) out hi
 
-cat /sys/class/gpio/gpio30/direction
-echo out > /sys/class/gpio/gpio30/direction
+GPIOs 64-95, gpio:
 
-# Turn On -
-echo 1 > /sys/class/gpio/gpio30/value
-
-# Turn Off -
-echo 0 > /sys/class/gpio/gpio30/value
+GPIOs 96-127, gpio:
+root@beaglebone:~# ls /sys/class/gpio/↩
+export  gpiochip0  gpiochip32  gpiochip64  gpiochip96  unexport
+root@beaglebone:~# 
 {% endhighlight %}
 
+查表可知，P9\_15端口对应的Linux信号为48，启用之：
+
+{% highlight bash %}
+echo 48 > /sys/class/gpio/export
+{% endhighlight %}
+
+再次查询状态，48号口已经可用，方向为输入，处于高电平：
+
+{% highlight bash linenos %}
+root@beaglebone:~# cat /sys/kernel/debug/gpio↩
+GPIOs 0-31, gpio:
+ gpio-6   (mmc_cd              ) in  lo
+
+GPIOs 32-63, gpio:
+ gpio-48  (sysfs               ) in  hi
+ gpio-52  (eMMC_RSTn           ) out lo
+ gpio-53  (beaglebone:green:usr) out lo
+ gpio-54  (beaglebone:green:usr) out lo
+ gpio-55  (beaglebone:green:usr) out hi
+ gpio-56  (beaglebone:green:usr) out lo
+ gpio-59  (McASP Clock Enable P) out hi
+
+GPIOs 64-95, gpio:
+
+GPIOs 96-127, gpio:
+root@beaglebone:~# ls /sys/class/gpio/↩
+export  gpio48  gpiochip0  gpiochip32  gpiochip64  gpiochip96  unexport
+root@beaglebone:~# 
+{% endhighlight %}
+
+基于此，我们可以依次进行以下操作：
+
+{% highlight bash %}
+# 查询并将方向修改为输出
+cat /sys/class/gpio/gpio48/direction
+echo out > /sys/class/gpio/gpio48/direction
+
+# 输出高平信号，即开灯
+echo 1 > /sys/class/gpio/gpio48/value
+
+# 输出低平信号，即关灯
+echo 0 > /sys/class/gpio/gpio48/value
+{% endhighlight %}
+
+通过双手灵活地切换`echo 0`和`echo 1`，我们可以手动实现外置LED的闪烁。或者，我们可以更轻松一些——写个[Bash脚本](https://github.com/vejuhust/beagle-code/blob/master/experiment/blink-led/blink-led.sh)来做这件事情：
 
 {% highlight bash %}
 #!/bin/bash
 
-echo 30 > /sys/class/gpio/export
-echo out > /sys/class/gpio/gpio30/direction
+echo 48 > /sys/class/gpio/export
+echo out > /sys/class/gpio/gpio48/direction
 
 blink_on=0
 while [ 1 ]; do
@@ -245,7 +292,7 @@ while [ 1 ]; do
     else
         blink_on=0
     fi
-    echo $blink_on > /sys/class/gpio/gpio30/value
+    echo $blink_on > /sys/class/gpio/gpio48/value
     sleep 0.5
 done
 {% endhighlight %}
@@ -253,12 +300,12 @@ done
 
 ## Blink with Node.js
 
-* 用BoneScript编写
+既然思路已经有了，我们可以回到Cloud9用BoneScript编写一段[类似的Node.js代码](https://github.com/vejuhust/beagle-code/blob/master/experiment/blink-led/blink-led.js)。或者复用[已有的代码](https://github.com/vejuhust/beagle-code/blob/master/experiment/blink-led/myblink.js)，稍加改动，便可让4+1个LED同时闪烁。
 
 {% highlight javascript %}
 var b = require('bonescript');
 
-var targetPin = "P9_11";
+var targetPin = "P9_15";
 var state = b.LOW;
 
 b.pinMode(targetPin, b.OUTPUT);
@@ -278,7 +325,7 @@ function toggle() {
 
 ## Blink with Python
 
-* 用Python编写
+使用Python可以轻易做到同样的事情，所使用的Adafruit_BBIO库已经预装，[代码如下](https://github.com/vejuhust/beagle-code/blob/master/experiment/blink-led/blink-led.py)：
 
 {% highlight python %}
 #!/usr/bin/env python
@@ -286,7 +333,7 @@ function toggle() {
 from Adafruit_BBIO import GPIO
 from time import sleep
 
-targetPin = "P9_11"
+targetPin = "P9_15"
 GPIO.setup(targetPin, GPIO.OUT)
 
 status = GPIO.LOW
@@ -301,8 +348,6 @@ while True:
 
 GPIO.cleanup()
 {% endhighlight %}
-
-
 
 
 
