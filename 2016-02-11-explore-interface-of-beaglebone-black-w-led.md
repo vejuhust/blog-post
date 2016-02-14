@@ -10,7 +10,7 @@ comments: true
 {% include _toc.html %}
 
 
-Light-Emitting Diode (a.k.a. LED)中文叫作发光二极管，是一种能发光的半导体电子元件，在近些年被普遍用作照明用途之前，曾主要用作指示灯及显示板。这次我们使用LED目的就是来指示电路是否正确的接通，堪称“Hello World”实验。
+Light-Emitting Diode (a.k.a. LED)中文叫作发光二极管，是一种能够发光的半导体电子元件，在近些年被普遍用作照明用途之前，曾主要用作指示灯及显示板。这次我们使用LED目的就是来指示电路是否正确的接通，堪称“Hello World”实验。
 
 
 
@@ -38,48 +38,51 @@ Light-Emitting Diode (a.k.a. LED)中文叫作发光二极管，是一种能发�
 
 ## Environment
 
-* 用浏览器登录
+接好BBB通上电，确保网络可以连通。待BBB启动完成后，通过其他设备的浏览器直接访问其80端口，稍等片刻，可以看见如下的介绍页面：
 
 <figure>
   <a href="/images/photo/beaglebone/webportal-screen.png">
-    <img src="/images/photo/beaglebone/webportal-screen.png" alt="Blah">
+    <img src="/images/photo/beaglebone/webportal-screen.png" alt="Screenshot of Web Portal on BBB">
   </a>
 </figure>
 
-* 按提示打开Cloud9
-* 贴入脚本并运行，要有耐心
+页面上内容是一个BoneScript入门的教程，可以直接跳到“Cloud9 IDE”部分，按提示在Cloud9中运行样例代码，如下图所示。
 
 <figure>
   <a href="/images/photo/beaglebone/cloud9-screen.png">
-    <img src="/images/photo/beaglebone/cloud9-screen.png" alt="Blah">
+    <img src="/images/photo/beaglebone/cloud9-screen.png" alt="Screenshot of Cloud9 IDE on BBB">
   </a>
 </figure>
 
-* BoneScript介绍
-* 代码修改
-* 验证环境没有问题
+由于整个环境启动较慢，点击Run之后请耐心半分钟，可以看见USR0、USR1和USR2灯熄灭，USR3灯在规律闪烁。若觉得单个LED闪烁可能不够明显，请参考[以下代码](https://github.com/vejuhust/beagle-code/blob/master/experiment/blink-led/myblink.js)将其修改成四个User LED同闪烁。至此，基本确认开发环境可用。
 
 {% highlight javascript %}
 var b = require('bonescript');
 
+var leds = ["USR0", "USR1", "USR2", "USR3" ];
 var state = b.LOW;
 
-b.pinMode("USR0", b.OUTPUT);
-b.pinMode("USR1", b.OUTPUT);
-b.pinMode("USR2", b.OUTPUT);
-b.pinMode("USR3", b.OUTPUT);
+for (var i in leds) {
+    b.pinMode(leds[i], b.OUTPUT);
+}
+
 setInterval(toggle, 500);
 
 function toggle() {
-    if (state == b.LOW) { 
-        state = b.HIGH; 
+    if (state == b.LOW) {
+        state = b.HIGH;
     }
-    else { 
-        state = b.LOW; 
+    else {
+        state = b.LOW;
     }
-    b.digitalWrite("USR3", state);
+
+    for (var i in leds) {
+        b.digitalWrite(leds[i], state);
+    }
 }
 {% endhighlight %}
+
+这儿所使用的[BoneScript](https://github.com/jadonk/bonescript)是一个[Node.js](https://nodejs.org/)库，用于在BBB上操控硬件。[Cloud9](https://c9.io/)是一款在线集成开发环境，在BBB之外，可以直接在云端使用或者部署到私有环境。
 
 
 
