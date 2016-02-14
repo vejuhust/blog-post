@@ -102,7 +102,7 @@ lrwxrwxrwx 1 root root 0 Jan  1  2000 beaglebone:green:usr3 -> ../../devices/ocp
 root@beaglebone:/sys/class/leds# 
 {% endhighlight %}
 
-因为当前在运行microSD中的固件，所以USR3对我们暂无意义，拿它练手：
+因为当前在运行microSD中的固件，所以USR3很适合重新利用：
 
 {% highlight bash linenos %}
 root@beaglebone:~# cd /sys/class/leds/beaglebone\:green\:usr3/↩
@@ -143,6 +143,7 @@ root@beaglebone:/sys/class/leds/beaglebone:green:usr3#
 以timer为例，亮起200ms后，熄灭800ms，以1Hz的频率闪烁：
 
 {% highlight bash %}
+cd /sys/class/leds/beaglebone\:green\:usr3/
 echo timer > trigger
 echo 200 > delay_on
 echo 800 > delay_off
@@ -180,22 +181,31 @@ while true; do echo 1 > activate; sleep 1; done
 
 # Blink External LED
 
-* 真正的Hello World实验
+确认了开发环境正常后，我们来接上面包板，进行真正的“Hello World”实验啦。我们的目标是通过GPIO来控制LED的闪烁。
 
 
 ## Wiring
 
-* 实验器材
-* 电阻计算
-* 接线图
+LED正向导通时的电阻并不大，直接接线会有短路烧毁BBB的风险。GPIO端口的电压为3.3V，最大输出电流为6mA，我们需要给LED串联一个330Ω的电阻。具体接线步骤如下：
+
+1. 将BBB的P9_1端口与面包板的接地相连
+2. 将LED的负极(即短引脚)与面包板的接地相连
+3. 将LED的正极(即长引脚)与330Ω的电阻串联
+4. 将330Ω的电阻的另一端与BBB的P9_15端口相连
 
 <figure>
   <a href="/images/photo/beaglebone/blink-led-fritzing.png">
-    <img src="/images/photo/beaglebone/blink-led-fritzing.png" alt="Blah">
+    <img src="/images/photo/beaglebone/blink-led-fritzing.png" alt="Breadboard Figure for 'Blink External LED'">
   </a>
 </figure>
 
-* 连接成功后的照片图
+上图为接线示意图，下图为点亮LED后的实拍照片。
+
+<figure>
+  <a href="/images/photo/beaglebone/blink-led-photo.jpg">
+    <img src="/images/photo/beaglebone/blink-led-photo.jpg" alt="Photo of Wiring for 'Blink External LED'">
+  </a>
+</figure>
 
 
 ## Blink with Filesystem
