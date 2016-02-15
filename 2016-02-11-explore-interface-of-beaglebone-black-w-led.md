@@ -10,7 +10,7 @@ comments: true
 {% include _toc.html %}
 
 
-Light-Emitting Diode (a.k.a. LED)中文叫作发光二极管，是一种能够发光的半导体电子元件，在近些年被普遍用作照明用途之前，曾主要用作指示灯及显示板。这次我们使用LED目的就是来指示电路是否正确的接通，堪称“Hello World”实验。
+Light-Emitting Diode (a.k.a. LED)中文叫作发光二极管，是一种能够发光的半导体电子元件，在近些年被普遍用作照明用途之前，曾主要用作指示灯及显示板。这次我们使用LED目的就是来指示电路是否正确的接通，类似中学物理课上常常出现的小灯泡:bulb:，堪称“Hello World”实验。
 
 
 
@@ -353,7 +353,60 @@ GPIO.cleanup()
 
 # Dim the LED
 
+## PWM
+
+Pulse-Width Modulation (a.k.a. PWM)输出可以用来实现低频的数模转换(DAC)或者控制电机，其主要原理是blahblahblah。
+
+BBB提供了八个PWM输出通道，其中三对属于三个eHRPWM模块，另外两个是eCAP模块。它们对应的pin脚如下：
+
+| PWM Channel  |Physical Pins    |
+|:-------------|:----------------|
+| eHRPWM 0A    | P9\_22, P9\_31  |
+| eHRPWM 0B    | P9\_21, P9\_29  |
+| eHRPWM 1A    | P8\_36✝, P9\_14 |
+| eHRPWM 1B    | P8\_34✝, P9\_16 |
+| eHRPWM 2A    | P8\_19, P8\_45✝ |
+| eHRPWM 2B    | P8\_13, P8\_46✝ |
+| eCAPPWM2     | P9\_28          |
+| eCAPPWM0     | P9\_42          |
+{: rules="groups"}
+
+注意:warning:：表中**✝**标注的pin脚是用于HDMI输出的，若需要复用，应先禁用HDMI。同一通道的pin脚的状态是相同的，改变其中一个另一个也会发生变化。
+
+
+
 ## Wiring
 
 
+
+## Dim with Filesystem
+
+
+
+## Dim with Python
+
+{% highlight python %}
+#!/usr/bin/env python
+
+from Adafruit_BBIO import PWM
+from time import sleep
+
+targetPin = "P9_14"
+intervalSecs = 0.05
+period = 5
+
+PWM.start(targetPin, 0)
+
+val_start, val_end, val_inc = 0, 100, 1
+
+for _ in range(period * 2):
+    for val in range(val_start, val_end + val_inc, val_inc):
+        PWM.set_duty_cycle(targetPin, float(val))
+        sleep(intervalSecs)
+    val_start, val_end = val_end, val_start
+    val_inc *= -1
+
+PWM.stop(targetPin)
+PWM.cleanup()
+{% endhighlight %}
 
