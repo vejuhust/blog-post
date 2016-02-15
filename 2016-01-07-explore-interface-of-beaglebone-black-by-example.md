@@ -95,6 +95,12 @@ General-Purpose Input/Output (a.k.a. GPIO)顾名思义就是通用型的输入�
 
 # :notebook: Table of Contents
 
+* [LED (Light-Emitting Diode)](/explore-interface-of-beaglebone-black-w-led/)
+  - [Blink On-Board LED](/explore-interface-of-beaglebone-black-w-led/#blink-on-board-led)
+  - [Blink External LED](/explore-interface-of-beaglebone-black-w-led/#blink-external-led)
+  - [Dim the LED](/explore-interface-of-beaglebone-black-w-led/#dim-the-led)
+* [Button](/explore-interface-of-beaglebone-black-w-button/)
+
 
 
 # :floppy_disk: Resource 
