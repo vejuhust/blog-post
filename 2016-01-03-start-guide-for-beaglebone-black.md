@@ -10,9 +10,10 @@ comments: true
 {% include _toc.html %}
 
 
-BeagleBone Black (a.k.a. BBB)
+BeagleBone Black (a.k.a. BBB) 简介blahblahblah
 
-在进一步实验之前，需要先准备好BBB的配件以及microSD卡。
+好了，接下来将从配件和microSD卡入手，逐步说明如何在BBB上配置开发环境。
+
 
 
 # Accessories
@@ -167,16 +168,26 @@ tmpfs           100M     0  100M   0% /run/user
 
 
 
-# WiFi设置
+# Setup WiFi on BBB
 
-* 设置方法
-* 性能测试
+若只能通过网线或者USB线与BBB相连的话，对BBB的使用会很受限制，我们来尝试一下让它连上WiFi。
+
+除了USB无线网卡之外，我们可能还需要用到USB Hub。因为BBB上的HDMI接口与USB接口过于靠近，如果USB无线网卡直接插在BBB上的话，信号会很受影响。官方推荐的解决方案是使用USB Hub或者延长线。
+
 
 ## Tenda W311MI
 
+* 价格
+* 参数
+* 配置方法
+* 信号强度
+
+
 ## Netgear WNA1000Mv2
 
+
 ## Netgear WNA3100M
+
 
 
 # 报告IP信息
@@ -201,8 +212,6 @@ tmpfs           100M     0  100M   0% /run/user
     }
 }
 {% endhighlight %}
-
-
 
 
 
