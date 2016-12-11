@@ -1,13 +1,12 @@
 ---
-layout: post
+layout: single
 title: Summer Again
 excerpt: "Just another summer in my life, and now it's 2015"
 modified: 2015-04-08
 tags: [life]
-comments: true
-image:
-  feature: feature/meiji-shrine-track.jpg
-  credit: Wei Ye
+header:
+  image: /images/feature/meiji-shrine-track.jpg
+  caption: "Photo Credit: Wei Ye"
 ---
 
 周二晚上离开办公室的时候，才发觉室外已经变得异常的闷热，于是我便清楚地知道，夏天又来了，在三月的最后一天。

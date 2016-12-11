@@ -1,13 +1,12 @@
 ---
-layout: post
+layout: single
 title: See You Again in Beijing
 excerpt: "Moving to Beijing after 2 years in Suzhou"
 modified: 2015-10-10
 tags: [life, career]
-comments: true
-image:
-  feature: feature/msft-beijing-west.jpg
-  credit: Wei Ye
+header:
+  image: /images/feature/msft-beijing-west.jpg
+  caption: "Photo Credit: Wei Ye"
 ---
 
 几周前，一个之前从苏州转职去北京的同事在Skype上问我：“你要回北京了？” 让我突然一愣，**回**北京？！仔细一想确实是**回**北京——无论是在业界的实习还是工作，北京都是我开始的地方。

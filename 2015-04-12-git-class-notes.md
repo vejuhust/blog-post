@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: single
 title: Git Class Notes
 excerpt: "Notes of getting started with Git based on CodeSchool courses"
 modified: 2015-11-27
@@ -7,7 +7,7 @@ tags: [git, tool]
 comments: true
 ---
 
-{% include _toc.html %}
+{% include toc icon="columns" title="Scenarios" %}
 
 使用Git也有一段时间了，但一直没有系统的学习过。随着使用频率的增加，觉得还是这还是有必要的。于是趁着春节假期，在CodeSchool[^1]上把Git Path [^2]的四门课学完了。边学边练边记，最后总结成此文。
 
@@ -128,7 +128,7 @@ git commit -a -m "Modify readme.md" # Add changes from all tracked files
 {% endhighlight %}
 
 :star2: **Advice**: commit message 文字应使用一般现在时。
-{: .notice}
+{: .notice--success}
 
 查看当前修改:
 {% highlight bash %}
@@ -177,7 +177,7 @@ git clean -xnd  # 删除untracked及被ignored的文件、目录
 # Undo
 
 :warning: **Warning**: 不要尝试撤销/修改已经push的commit。
-{: .notice}
+{: .notice--warning}
 
 撤销文件级修改:
 {% highlight bash %}
@@ -309,7 +309,7 @@ git push --rebase   # 避免无意义的merge commit
 {% endhighlight %}
 
 :clipboard: **Info**: `git pull`等价于`git fetch && git merge origin/master`。
-{: .notice}
+{: .notice--info}
 
 克隆远程仓库:
 {% highlight bash %}
@@ -318,7 +318,7 @@ git clone git@github.com:vejuhust/learn-git.git demo
 {% endhighlight %}
 
 :clipboard: **Info**: `git clone`等价于下载仓库，然后`git remote add origin`，最后check out主分支。
-{: .notice}
+{: .notice--info}
 
 创建远程分支:
 {% highlight bash %}
@@ -368,7 +368,7 @@ git merge 123abc
 {% endhighlight %}
 
 :star2: **Advice**: 多人协作时，应当先同步代码再发布，即，先`git pull`再`git push`。
-{: .notice}
+{: .notice--success}
 
 出现冲突时需要编辑冲突部分:
 {% highlight bash %}
@@ -383,7 +383,7 @@ git push
 # Rebase
 
 :clipboard: **Info**: `git rebase`会先缓存本地独有修改，重现远程修改，再重现缓存区的所有修改
-{: .notice}
+{: .notice--info}
 
 对本地分支进行rebase:
 {% highlight bash %}
@@ -475,7 +475,7 @@ git blame index.html --date short
 * 修改为尚未公开的commit
 
 :star2: **Advice**: 操作之前先进行本地备份，例如`git clone learn learn-backup`。
-{: .notice}
+{: .notice--success}
 
 借助`git filter-branch`按commit逐条执行command，若中途command执行失败则停止:
 {% highlight bash %}
@@ -568,7 +568,7 @@ git stash pop               # 与 git stash apply & git stash drop 相同
 {% endhighlight %}
 
 :star2: **Advice**: 若出现冲突，可以先`git commit`或`reset`，再`apply`。
-{: .notice}
+{: .notice--success}
 
 
 
