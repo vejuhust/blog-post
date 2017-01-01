@@ -84,6 +84,14 @@ comments: true
 
 ### Component
 
+微信参考[Polymer](https://www.polymer-project.org/1.0/)设计了[WX Component](https://mp.weixin.qq.com/debug/wxadoc/dev/component/)组件系统为开发者提供了基础组件，以便通过组合的方式进行快速开发。这种设计隔离了开发者的代码和底层具体的渲染方式，方便未来移植到新的平台，并支持自定义事件。
+
+大部分组件是基于HTML在WebView内直接实现的，小部分组件的实现是在WebView层上覆盖了Native层(目前有下列四个组件是这样实现的)。因而微信小程序并不再是纯粹的Web App，而是一种Web+Native的Hybrid应用。
+
+* `<canvas/>` - [画布组件](https://mp.weixin.qq.com/debug/wxadoc/dev/component/canvas.html)
+* `<map/>` - [地图组件](https://mp.weixin.qq.com/debug/wxadoc/dev/component/map.html)
+* `<video/>` - [视频组件](https://mp.weixin.qq.com/debug/wxadoc/dev/component/video.html)
+* `<textarea/>` - [多行输入框](https://mp.weixin.qq.com/debug/wxadoc/dev/component/textarea.html)
 
 
 ## App Service
