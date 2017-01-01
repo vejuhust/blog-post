@@ -26,12 +26,34 @@ comments: true
   - API基于JSSDK演化而来，通过JSBridge调用系统层的原生能力。
 * **Native(系统层)**主要起到了桥梁的作用，视图层和逻辑层的交互以及对微信客户端原生能力的调用都是通过系统层进行连接。
 
+这是一个典型的[MVVM模式](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel)，其中App Service(逻辑层)作为*Model*向作为*View*的View(视图层)发送数据用于展示，而后者又将被触发的事件发送给前者，这一切都是通过作为*View Model*的Native(系统层)传递的。
+
 ![Framework Inside App]({{ site.url }}{{ site.baseurl }}/images/photo/weapp-develop/overview-figure-2.png)
 
 
 ## View
 
+小程序框架在[**View(视图层)**](https://mp.weixin.qq.com/debug/wxadoc/dev/framework/view/)执行开发者编写的WXML和WXSS代码，并将其展示为WebView上的组件。
+
 ### Page Frame
+
+小程序所使用的WebView称为**Page Frame**，每个Page Frame占用1个线程，并独立初始化。每个小程序最多可以同时启动9个Page Frame线程，即最多5层的页面栈加上最多5个tabBar(第一个tabBar同属于页面栈最底层)。
+
+打开页面时，Native(系统层)会额外预加载一个WebView，并用类似以下的HTML代码进行初始化。这个初始化过程花费大约100ms，加载在`<script/>`中的JavaScript代码包含小程序框架自身的代码以及被编译后的所有页面的WXML和WXSS代码。初始化完成后，这个WebView会被闲置，直到需要打开新的页面，Page Frame收到指令后会用大概100ms去执行`<script/>`中的代码将其指定的具体页面内容渲染在`<body/>`中，其过程无需请求额外资源。上述过程在后台执行完毕之后，才会将页面推到前台真正展现给用户。这一机制加速了小程序页面切换速度，保证其体验与传统Web App相比更加流畅。
+
+{% highlight html %}
+<html>
+<head>
+    <script>
+        // initial scripts
+    </script>
+</head>
+<body>
+    <!-- content -->
+</body>
+</html>
+{% endhighlight %}
+
 
 ### WXML
 
