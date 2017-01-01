@@ -10,7 +10,7 @@ comments: true
 为了更有效地进行微信小程序的开发，我参加了微信商学院11月23日在北京和12月20日在上海举办的两场开发者培训班，也与同事合作进行了两场公司内部的分享。这篇文章记录了对微信小程序框架的解析(基于微信客户端[iOS 6.5.2](https://itunes.apple.com/us/app/wechat/id414478124?mt=8)和[Android 6.3.32](https://play.google.com/store/apps/details?id=com.tencent.mm)版本)，以及在开发实战中总结的技巧。部分内容根据微信工程师胡浩的讲课整理而成。
 
 
-# Overview
+## Overview
 
 作为基于且依赖微信的[小程序框架](https://mp.weixin.qq.com/debug/wxadoc/dev/framework/MINA.html)，其目标是通过类Web技术为开发者在微信中开发出媲美原生App的应用提供了一整套解决方案。
 
@@ -29,28 +29,28 @@ comments: true
 ![Framework Inside App]({{ site.url }}{{ site.baseurl }}/images/photo/weapp-develop/overview-figure-2.png)
 
 
-# View
+## View
 
-## Page Frame
+### Page Frame
 
-## WXML
+### WXML
 
-## WXSS
+### WXSS
 
-## Component
-
-
-
-# App Service
-
-## Route
+### Component
 
 
-# Life Cycle
 
-## Inside App
+## App Service
 
-## System-wide
+### Route
 
 
-# ProTip™
+## Life Cycle
+
+### Inside App
+
+### System-wide
+
+
+## ProTip™
