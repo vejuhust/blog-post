@@ -96,11 +96,11 @@ comments: true
 
 ## App Service
 
-[**App Service(逻辑层)**](https://mp.weixin.qq.com/debug/wxadoc/dev/framework/app-service/)是小程序框架的基础，它执行开发者用JavaScript编写的业务逻辑代码，并帮助View(视图层)与Native(系统层)交互。它还承担了数据绑定、事件分发、路由管理和生命周期管理的职责。开发者需要在App Service中编写`App()`和`Page()`方法来完成对小程序本身和每个页面的注册。
+[**App Service(逻辑层)**](https://mp.weixin.qq.com/debug/wxadoc/dev/framework/app-service/)是小程序框架的基础，它执行开发者用JavaScript编写的业务逻辑代码，并帮助View(视图层)与Native(系统层)交互。它还承担了数据绑定、事件分发、路由管理和生命周期管理的职责。开发者需要在App Service中编写[`App()`](https://mp.weixin.qq.com/debug/wxadoc/dev/framework/app-service/app.html)和[`Page()`](https://mp.weixin.qq.com/debug/wxadoc/dev/framework/app-service/page.html)方法来完成对小程序自身和每个页面的注册。
 
 ### Binding
 
-事件绑定的一个简单实例——用户点击按钮导致其文字、样式和图标展示发生变化。页面部分的WXML代码如下：
+[事件绑定](https://mp.weixin.qq.com/debug/wxadoc/dev/framework/view/wxml/event.html)的一个简单实例——用户点击按钮导致其文字、样式和图标展示发生变化。页面部分的WXML代码如下：
 
 {% highlight xml %}
 {% raw %}
@@ -141,6 +141,11 @@ Page({
 
 
 ### Route
+
+App Service负责对小程序中所有页面路由的管理，路由的触发方式以及页面生命周期函数参考[文档](https://mp.weixin.qq.com/debug/wxadoc/dev/framework/app-service/page.html#%E9%A1%B5%E9%9D%A2%E7%9A%84%E8%B7%AF%E7%94%B1)。有两点需要注意：
+
+1. 小程序页面栈最高限制为五层，即不能同时打开超过五层的页面，要求开发者不能在小程序中设计过多层级。
+2. App Service总共只有有一个线程，它会按顺序执行执行生命周期函数。耗时较长的生命周期函数并不会堵塞View渲染页面，但会造成App Service中其他事件的处理被延后。
 
 
 ## Life Cycle
