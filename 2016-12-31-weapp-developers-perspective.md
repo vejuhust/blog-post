@@ -23,7 +23,7 @@ comments: true
 * **View(视图层)**起到了浏览器的作用，来展示各个页面。
 * **App Service(逻辑层)**则承担了服务器的部分职责，提供本地存储，并支持离线功能：
   - Manager负责管理数据、页面的生命周期、事件的分发、路由跳转。
-  - API基于JSSDK演化而来，通过JSBridge调用系统层的原生能力。
+  - [API](https://mp.weixin.qq.com/debug/wxadoc/dev/api/)基于JSSDK演化而来，通过JSBridge调用系统层的原生能力。
 * **Native(系统层)**主要起到了桥梁的作用，视图层和逻辑层的交互以及对微信客户端原生能力的调用都是通过系统层进行连接。
 
 这是一个典型的[MVVM模式](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel)，其中App Service(逻辑层)作为*Model*向作为*View*的View(视图层)发送数据用于展示，而后者又将被触发的事件发送给前者，这一切都是通过作为*View Model*的Native(系统层)传递的。
@@ -95,6 +95,50 @@ comments: true
 
 
 ## App Service
+
+[**App Service(逻辑层)**](https://mp.weixin.qq.com/debug/wxadoc/dev/framework/app-service/)是小程序框架的基础，它执行开发者用JavaScript编写的业务逻辑代码，并帮助View(视图层)与Native(系统层)交互。它还承担了数据绑定、事件分发、路由管理和生命周期管理的职责。开发者需要在App Service中编写`App()`和`Page()`方法来完成对小程序本身和每个页面的注册。
+
+### Binding
+
+事件绑定的一个简单实例——用户点击按钮导致其文字、样式和图标展示发生变化。页面部分的WXML代码如下：
+
+{% highlight xml %}
+{% raw %}
+<view class="button-wrapper">
+    <button type="{{buttonType}}" size="mini" loading="{{loading}}" bindtap="setLoading">
+        {{buttonText}}
+    </button>
+</view>
+{% endraw %}
+{% endhighlight %}
+
+相应Page定义中声明的事件处理函数如下：
+
+{% highlight javascript %}
+Page({
+    data: {
+        buttonType: 'primary',
+        buttonText: 'Load',
+        loading: false,
+    },
+    setLoading: function(event) {
+        var isLoading = this.data.loading;
+        var newData = {
+            loading: !isLoading,
+        };
+        if (isLoading) {
+            newData["buttonText"] = "Load";
+            newData["buttonType"] = "primary";
+        } else {
+            newData["buttonText"] = "Cancel";
+            newData["buttonType"] = "warn";
+        }
+        console.log(isLoading, event);
+        this.setData(newData);
+    },
+});
+{% endhighlight %}
+
 
 ### Route
 
