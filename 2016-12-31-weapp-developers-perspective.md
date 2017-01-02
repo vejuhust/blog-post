@@ -2,10 +2,13 @@
 layout: single
 title: "WeApp in WeChat: A Developer's Perspective"
 excerpt: "Introduction to framework of WeApp in WeChat, tips & tricks for developers."
-modified: 2016-12-31
+modified: 2017-01-02
 tags: [wechat, develop, framework]
 comments: true
 ---
+
+
+微信小程序可以看做是微信对其自身平台上Web Apps(即HTML5页面)进行规范化的措施，它通过流量、性能和效率吸引开发者，同时满足了微信对内容审核和生态建立的需求。
 
 为了更有效地进行微信小程序的开发，我参加了微信商学院11月23日在北京和12月20日在上海举办的两场开发者培训班，也与同事合作进行了两场公司内部的分享。这篇文章记录了对微信小程序框架的解析(基于微信客户端[iOS 6.5.2](https://itunes.apple.com/us/app/wechat/id414478124?mt=8)和[Android 6.3.32](https://play.google.com/store/apps/details?id=com.tencent.mm)版本)，以及在开发实战中总结的技巧。部分内容根据微信工程师胡浩的讲课整理而成。
 
@@ -39,7 +42,7 @@ comments: true
 
 小程序所使用的WebView被称为**Page Frame**，每个Page Frame占用1个线程，并独立初始化。每个小程序最多可以同时启动9个Page Frame线程，即最多5层的页面栈加上最多5个tabBar(第一个tabBar同属于页面栈最底层)。
 
-打开页面时，Native(系统层)会额外预加载一个WebView，并用类似以下的HTML代码进行初始化。这个初始化过程花费大约100ms，加载在`<script/>`中的JavaScript代码包含小程序框架自身的代码以及被编译后的所有页面的WXML和WXSS代码。初始化完成后，这个WebView会被闲置，直到需要打开新的页面，Page Frame收到指令后会用大概100ms去执行`<script/>`中的代码将其指定的具体页面内容渲染在`<body/>`中，其过程无需请求额外资源。上述过程在后台执行完毕之后，才会将页面推到前台真正展现给用户。这一机制加速了小程序页面切换速度，保证其体验与传统Web App相比更加流畅。
+打开页面时，Native(系统层)会额外预加载一个WebView，并用类似以下的HTML代码进行初始化。这个初始化过程花费大约100ms，加载在`<script/>`中的JavaScript代码包含小程序框架自身的代码以及被编译后的所有页面的WXML和WXSS代码。初始化完成后，这个WebView会被闲置，直到需要打开新的页面，Page Frame收到指令后会去执行`<script/>`中的代码并结合App Service中定义的初始数据将其指定的具体页面内容渲染在`<body/>`中，其过程无需请求额外资源，这一步骤同样需要100ms时间。上述过程在后台执行完毕之后，才会将页面推到前台真正展现给用户。Page Frame机制提高了小程序页面的切换速度，保证其体验与传统Web App相比更加流畅。
 
 {% highlight html %}
 <html>
@@ -175,7 +178,7 @@ App Service负责对小程序中所有页面路由的管理，路由的触发方
     * Page Frame会加载另一个已经初始化的View线程
 5. 如果Route事件导致返回到第一个页面，第一个页面将再次展现并调用App Service中对应Page中的`onShow()`函数
 6. 页面被关闭时，App Service中对应的Page会调用`onUnload()`函数
-7. 当用户按Home键或左上角的退出，小程序并没有被真正的关闭，而是会进入后台并调用App Service自身的`onHide()`函数；当用户再此进入小程序时，会调用App Service自身的`onShow()`函数。当小程序进入后台一定时间之后，或占用系统资源过高时，小程序相关线程才会被真正销毁。
+7. 当用户按Home键或左上角的退出，小程序并没有被真正的关闭，而是会进入后台并调用App Service自身的`onHide()`函数；当用户再此进入小程序时，会调用App Service自身的`onShow()`函数。当小程序进入后台一定时间之后，或占用系统资源过高时，该小程序的View和App Service线程才会被真正销毁。
 
 完整的生命周期示意图见下：
 
@@ -191,9 +194,11 @@ App Service负责对小程序中所有页面路由的管理，路由的触发方
 
 ## ProTip™
 
+总结一下这几周以来发现的技巧和趟过的坑。
+
 ### Tips
 
-* 微信小程序的JavaScript运行环境：
+* 微信小程序的JavaScript运行环境，根据平台分别是：
   - iOS: [JavaScriptCore](https://developer.apple.com/reference/javascriptcore)
   - Android: [X5 JavaScript解析器](http://x5.tencent.com/)
   - DevTools: [NW.js](https://nwjs.io/)
@@ -204,10 +209,10 @@ App Service负责对小程序中所有页面路由的管理，路由的触发方
 
 ### Tricks
 
-* 微信web开发者工具(DevTools)中包含了命令行版本的小程序WXML和WXSS编译器(即`wcc`和`wcsc`)，可以在工具的Console中执行`openVendor()`命令打开该目录，或者直接访问：
+* DevTools中包含了命令行版本的小程序WXML和WXSS编译器(即`wcc`和`wcsc`)，可以在工具的Console中执行`openVendor()`命令打开该目录，或者直接访问：
   - Windows: {% raw %}%PROGRAMFILES(X86)%\Tencent\微信web开发者工具\package.nw\app\dist\weapp\onlinevendor\{% endraw %}
   - macOS: {% raw %}/Applications/wechatwebdevtools.app/Contents/Resources/app.nw/app/dist/weapp/onlinevendor/{% endraw %}
-* 微信web开发者工具(DevTools)是使用[NW.js](https://nwjs.io/)编写而成，可以通过修改其.js文件对其功能进行修改，以0.11.122100版本为例，程序目录在：
+* DevTools使用[NW.js](https://nwjs.io/)编写而成，可以通过修改相关.js文件直接对其hack(需要重启DevTools)，以0.11.122100版本为例，程序目录在：
   - Windows: {% raw %}%PROGRAMFILES(X86)%\Tencent\微信web开发者工具\package.nw\app\{% endraw %}
   - macOS: {% raw %}/Applications/wechatwebdevtools.app/Contents/Resources/app.nw/app/{% endraw %}
 
@@ -218,9 +223,3 @@ App Service负责对小程序中所有页面路由的管理，路由的触发方
 * 因为是微信客户端代理网络通信，服务器返回的诸如set-cookie之类的headers是无法起作用的。
 * WXSS中无法使用本地资源(例如，图片、字体等)，但可以引用网络资源。
 * `<map/>`地图组件中`markers`标记点的`iconPath`属性无法使用网络资源，仅支持本地资源。
-
-
-
-## Conclusion
-
-综上所述，可以认为微信小程序是微信对其自身平台上Web Apps(俗称H5)的一个规范化的举措，它通过性能和效率吸引开发者，同时满足了微信对内容审核和生态建立的需求。
