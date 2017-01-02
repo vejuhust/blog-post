@@ -150,7 +150,7 @@ App Service负责对小程序中所有页面路由的管理，路由的触发方
 
 ## Life Cycle
 
-从两个方面阐述小程序的生命周期方面，一是小程序在微信客户端内运行的生命周期，二是小程序从开发者提交到用户加载的大周期。
+从两个方面阐述小程序的生命周期方面，一是小程序在微信客户端内运行的生命周期，二是小程序从开发者提交到用户加载的全过程。
 
 ### Inside App
 
@@ -186,7 +186,41 @@ App Service负责对小程序中所有页面路由的管理，路由的触发方
 
 开发者通过[微信web开发者工具(DevTools)](https://mp.weixin.qq.com/debug/wxadoc/dev/devtools/devtools.html)提交所编写的小程序代码，开发者工具会将工程目录下的全部文件打包上传至微信后台服务器。微信后台服务器会将wxml、wxss和js文件都编译并打包为JavaScript，其中wxml和wxss文件打包后会合并，json配置文件仅做打包。用户打开小程序时，微信客户端会从腾讯的CDN下载并加载编译后的小程序，全部wxml和wxss文件的内容最终进入View，所有js文件的内容进入App Server，json配置被Native所用。过程图解见下：
 
-![Distribution Process]({{ site.url }}{{ site.baseurl }}/images/photo/weapp-develop/distribute-process.png)
+![Distribution Process]({{ site.url }}{{ site.baseurl }}/images/photo/weapp-develop/distribute-process.jpg)
 
 
 ## ProTip™
+
+### Tips
+
+* 微信小程序的JavaScript运行环境：
+  - iOS: [JavaScriptCore](https://developer.apple.com/reference/javascriptcore)
+  - Android: [X5 JavaScript解析器](http://x5.tencent.com/)
+  - DevTools: [NW.js](https://nwjs.io/)
+* Page Frame所涉及的[Virtual DOM](https://medium.com/cardlife-app/what-is-virtual-dom-c0ec6d6a925c)算法来自[React](https://facebook.github.io/react/)，有相当多的[第三方实现](http://vdom-benchmark.github.io/vdom-benchmark/)。
+* 小程序支持ECMAScript 6的语法，但不支持它的函数。
+* 在微信客户端上运行的小程序必须使用HTTPS与开发者服务器通讯，[TLS](https://en.wikipedia.org/wiki/Transport_Layer_Security)版本要求为1.2。
+
+
+### Tricks
+
+* 微信web开发者工具(DevTools)中包含了命令行版本的小程序WXML和WXSS编译器(即`wcc`和`wcsc`)，可以在工具的Console中执行`openVendor()`命令打开该目录，或者直接访问：
+  - Windows: {% raw %}%PROGRAMFILES(X86)%\Tencent\微信web开发者工具\package.nw\app\dist\weapp\onlinevendor\{% endraw %}
+  - macOS: {% raw %}/Applications/wechatwebdevtools.app/Contents/Resources/app.nw/app/dist/weapp/onlinevendor/{% endraw %}
+* 微信web开发者工具(DevTools)是使用[NW.js](https://nwjs.io/)编写而成，可以通过修改其.js文件对其功能进行修改，以0.11.122100版本为例，程序目录在：
+  - Windows: {% raw %}%PROGRAMFILES(X86)%\Tencent\微信web开发者工具\package.nw\app\{% endraw %}
+  - macOS: {% raw %}/Applications/wechatwebdevtools.app/Contents/Resources/app.nw/app/{% endraw %}
+
+
+### Traps
+
+* 使用Native实现的混合组件(例如，`<canvas/>`、`<map/>`等)展现时是凌驾于WebView层之上的，因而没法被其他Web实现的组件覆盖，有需要时应考虑隐藏。
+* 因为是微信客户端代理网络通信，服务器返回的诸如set-cookie之类的headers是无法起作用的。
+* WXSS中无法使用本地资源(例如，图片、字体等)，但可以引用网络资源。
+* `<map/>`地图组件中`markers`标记点的`iconPath`属性无法使用网络资源，仅支持本地资源。
+
+
+
+## Conclusion
+
+综上所述，可以认为微信小程序是微信对其自身平台上Web Apps(俗称H5)的一个规范化的举措，它通过性能和效率吸引开发者，同时满足了微信对内容审核和生态建立的需求。
