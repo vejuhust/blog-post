@@ -16,19 +16,19 @@ comments: true
 
 小程序框架在微信客户端上由三部分组成：**View(视图层)**、**App Service(逻辑层)**和**Native(系统层)**。View和App Service构成了一个单向的数据绑定系统，在客户端内部通过Data和Event交互。App Service通过JSBridge与Native通讯调用微信客户端的原生能力。小程序与外部服务的通讯全部由Native承担——当用户第一次打开小程序或更新的时候，Native会从腾讯的CDN下载小程序完整的package；小程序运行过程中与开发者服务器的通讯也同样被Native代理。示意图见下：
 
-![Framework Overview]({{ site.url }}{{ site.baseurl }}/images/photo/weapp-develop/overview-figure-1.png)
+![Framework Overview]({{ site.url }}{{ site.baseurl }}/images/photo/weapp-develop/overview-1.jpg)
 
 参照下图，具体观其内部：
 
 * **View(视图层)**起到了浏览器的作用，来展示各个页面。
 * **App Service(逻辑层)**则承担了服务器的部分职责，提供本地存储，并支持离线功能：
   - Manager负责管理数据、页面的生命周期、事件的分发、路由跳转。
-  - [API](https://mp.weixin.qq.com/debug/wxadoc/dev/api/)基于JSSDK演化而来，通过JSBridge调用系统层的原生能力。
+  - [API](https://mp.weixin.qq.com/debug/wxadoc/dev/api/)基于JSSDK演化而来，通过WeixinJSBridge调用系统层的原生能力。
 * **Native(系统层)**主要起到了桥梁的作用，视图层和逻辑层的交互以及对微信客户端原生能力的调用都是通过系统层进行连接。
 
 这是一个典型的[MVVM模式](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel)，其中App Service(逻辑层)作为*Model*向作为*View*的View(视图层)发送数据用于展示，而后者又将被触发的事件发送给前者，这一切都是通过作为*View Model*的Native(系统层)传递的。
 
-![Framework Inside App]({{ site.url }}{{ site.baseurl }}/images/photo/weapp-develop/overview-figure-2.png)
+![Framework Inside App]({{ site.url }}{{ site.baseurl }}/images/photo/weapp-develop/overview-2.jpg)
 
 
 ## View
@@ -150,7 +150,37 @@ App Service负责对小程序中所有页面路由的管理，路由的触发方
 
 ## Life Cycle
 
+从两个方面阐述小程序的生命周期方面，一是小程序在微信客户端内运行的生命周期，二是小程序从开发者提交到用户加载的大周期。
+
 ### Inside App
+
+![App Life Cycle (Animation)]({{ site.url }}{{ site.baseurl }}/images/photo/weapp-develop/app-life-cycle.gif)
+
+以上动图展现了一个小程序在微信客户端内从开启到关闭的全过程：
+
+1. Native线程是微信客户端本身，它通过Launch事件启动App Service和View两个线程：
+    * App Service线程调用注册在`App()`函数中的`onLaunch()`函数
+    * View线程开始初始化过程，即进行Page Frame的公共库和所有页面的WXML和WXSS代码的注入
+2. 用户打开小程序后，Native会发送Route事件以打开首页：
+    * 在App Service中将Page进行实例化：
+        * 将页面的初始化数据发送给View
+        * 依次执行注册在`Page()`函数中的`onLoad()`和`onShow()`函数
+    * View进行第二次初始化过程，即通知Page Frame渲染具体的页面：
+        * 初始化完成后，开始渲染来自Page的初始化数据
+        * 渲染完成后，会将完整的首页展示给用户
+        * 并通知Page渲染已完成，让其调用`onReady()`函数
+3. 当用户产生点击一类的输入，操作会以Event的形式发送给App Service，调用开发者定义的事件处理函数，执行后可能会将部分数据发回给View进行再次渲染
+4. 当页面发生跳转时，Native再次发送一个Route事件给App Service和View：
+    * App Service中当前的Page会进入隐藏的状态，调用`onHide()`函数，同时会加载另一个Page
+    * Page Frame会加载另一个已经初始化的View线程
+5. 如果Route事件导致返回到第一个页面，第一个页面将再次展现并调用App Service中对应Page中的`onShow()`函数
+6. 页面被关闭时，App Service中对应的Page会调用`onUnload()`函数
+7. 当用户按Home键或左上角的退出，小程序并没有被真正的关闭，而是会进入后台并调用App Service自身的`onHide()`函数；当用户再此进入小程序时，会调用App Service自身的`onShow()`函数。当小程序进入后台一定时间之后，或占用系统资源过高时，小程序相关线程才会被真正销毁。
+
+完整的生命周期示意图见下：
+
+![App Life Cycle]({{ site.url }}{{ site.baseurl }}/images/photo/weapp-develop/app-life-cycle.png)
+
 
 ### System-wide
 
