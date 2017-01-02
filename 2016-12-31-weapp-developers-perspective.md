@@ -156,7 +156,7 @@ App Service负责对小程序中所有页面路由的管理，路由的触发方
 
 ![App Life Cycle (Animation)]({{ site.url }}{{ site.baseurl }}/images/photo/weapp-develop/app-life-cycle.gif)
 
-以上动图展现了一个小程序在微信客户端内从开启到关闭的全过程：
+以上动图展示了一个小程序在微信客户端内从开启到关闭的全过程：
 
 1. Native线程是微信客户端本身，它通过Launch事件启动App Service和View两个线程：
     * App Service线程调用注册在`App()`函数中的`onLaunch()`函数
@@ -182,7 +182,11 @@ App Service负责对小程序中所有页面路由的管理，路由的触发方
 ![App Life Cycle]({{ site.url }}{{ site.baseurl }}/images/photo/weapp-develop/app-life-cycle.png)
 
 
-### System-wide
+### Distribution Process
+
+开发者通过[微信web开发者工具(DevTools)](https://mp.weixin.qq.com/debug/wxadoc/dev/devtools/devtools.html)提交所编写的小程序代码，开发者工具会将工程目录下的全部文件打包上传至微信后台服务器。微信后台服务器会将wxml、wxss和js文件都编译并打包为JavaScript，其中wxml和wxss文件打包后会合并，json配置文件仅做打包。用户打开小程序时，微信客户端会从腾讯的CDN下载并加载编译后的小程序，全部wxml和wxss文件的内容最终进入View，所有js文件的内容进入App Server，json配置被Native所用。过程图解见下：
+
+![Distribution Process]({{ site.url }}{{ site.baseurl }}/images/photo/weapp-develop/distribute-process.png)
 
 
 ## ProTip™
