@@ -8,9 +8,9 @@ comments: true
 ---
 
 
-微信小程序可以看做是微信对其自身平台上Web Apps(即HTML5页面)进行规范化的措施，它通过流量、性能和效率吸引开发者，同时满足了微信对内容审核和生态建立的需求。
+微信小程序可以看做是微信对其自身平台上Web App(即HTML5应用)进行规范化的措施，它通过流量、性能和效率吸引开发者，同时满足了微信对内容审核和生态建立的需求。
 
-为了更有效地进行微信小程序的开发，我参加了微信商学院11月23日在北京和12月20日在上海举办的两场开发者培训班，也与同事合作进行了两场公司内部的分享。这篇文章记录了对微信小程序框架的解析(基于微信客户端[iOS 6.5.2](https://itunes.apple.com/us/app/wechat/id414478124?mt=8)和[Android 6.3.32](https://play.google.com/store/apps/details?id=com.tencent.mm)版本)，以及在开发实战中总结的技巧。部分内容根据微信工程师胡浩的讲课整理而成。
+我参加了微信商学院11月23日在北京和12月20日在上海举办的两场开发者培训班，也与同事合作进行了两场公司内部的分享。这篇文章记录了对微信小程序框架的解析(基于微信客户端[iOS 6.5.2](https://itunes.apple.com/us/app/wechat/id414478124?mt=8)和[Android 6.3.32](https://play.google.com/store/apps/details?id=com.tencent.mm)版本)，以及在开发实战中总结的技巧。部分内容根据微信工程师胡浩的讲课整理而成。
 
 
 ## Overview
@@ -210,11 +210,11 @@ App Service负责对小程序中所有页面路由的管理，路由的触发方
 ### Tricks
 
 * DevTools中包含了命令行版本的小程序WXML和WXSS编译器(即`wcc`和`wcsc`)，可以在工具的Console中执行`openVendor()`命令打开该目录，或者直接访问：
-  - Windows: {% raw %}%PROGRAMFILES(X86)%\Tencent\微信web开发者工具\package.nw\app\dist\weapp\onlinevendor\{% endraw %}
-  - macOS: {% raw %}/Applications/wechatwebdevtools.app/Contents/Resources/app.nw/app/dist/weapp/onlinevendor/{% endraw %}
+  - Windows: `{% raw %}%PROGRAMFILES(X86)%\Tencent\微信web开发者工具\package.nw\app\dist\weapp\onlinevendor\{% endraw %}`
+  - macOS: `{% raw %}/Applications/wechatwebdevtools.app/Contents/Resources/app.nw/app/dist/weapp/onlinevendor/{% endraw %}`
 * DevTools使用[NW.js](https://nwjs.io/)编写而成，可以通过修改相关.js文件直接对其hack(需要重启DevTools)，以0.11.122100版本为例，程序目录在：
-  - Windows: {% raw %}%PROGRAMFILES(X86)%\Tencent\微信web开发者工具\package.nw\app\{% endraw %}
-  - macOS: {% raw %}/Applications/wechatwebdevtools.app/Contents/Resources/app.nw/app/{% endraw %}
+  - Windows: `{% raw %}%PROGRAMFILES(X86)%\Tencent\微信web开发者工具\package.nw\app\{% endraw %}`
+  - macOS: `{% raw %}/Applications/wechatwebdevtools.app/Contents/Resources/app.nw/app/{% endraw %}`
 
 
 ### Traps
