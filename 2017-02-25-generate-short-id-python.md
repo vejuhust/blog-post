@@ -8,7 +8,7 @@ comments: true
 ---
 
 
-最近的一个项目需要产生唯一ID，而且这个ID可能作为URL的一部分。事情很简单，但几经折腾，最后还是找到比较令人满意的方法。
+最近的一个项目需要大量生成唯一的ID，而且ID可能作为URL的一部分。事情很简单，经过略折腾，最后还是找到了令人满意的方法。
 
 
 ## Version 0: Base62 Encoded UUID1
@@ -113,3 +113,47 @@ JpJ1hhSz06E
 JpJ1hqqJUUM
 JbKp7Sn6t34
 {% endhighlight %}
+
+
+## Version 3:
+
+既然长度已经达标，那么来检查**唯一性**这一要求。通过在同一机器短时间内多次调用的方法，依次测试了上述三个版本，结果表明后两个会出现大量的碰撞。以Version 2为例，下列32个UUID转化后均为`9EPwBcQLEfG`——
+
+{% highlight text %}
+2a44b540-fb79-11e6-be32-000d3a80d4c8
+2a44b543-fb79-11e6-be32-000d3a80d4c8
+2a44b54c-fb79-11e6-be32-000d3a80d4c8
+2a44b54f-fb79-11e6-be32-000d3a80d4c8
+2a44b570-fb79-11e6-be32-000d3a80d4c8
+2a44b573-fb79-11e6-be32-000d3a80d4c8
+2a44b57c-fb79-11e6-be32-000d3a80d4c8
+2a44b57f-fb79-11e6-be32-000d3a80d4c8
+2a44b580-fb79-11e6-be32-000d3a80d4c8
+2a44b583-fb79-11e6-be32-000d3a80d4c8
+2a44b58c-fb79-11e6-be32-000d3a80d4c8
+2a44b58f-fb79-11e6-be32-000d3a80d4c8
+2a44b5b0-fb79-11e6-be32-000d3a80d4c8
+2a44b5b3-fb79-11e6-be32-000d3a80d4c8
+2a44b5bc-fb79-11e6-be32-000d3a80d4c8
+2a44b5bf-fb79-11e6-be32-000d3a80d4c8
+2a44b640-fb79-11e6-be32-000d3a80d4c8
+2a44b643-fb79-11e6-be32-000d3a80d4c8
+2a44b64c-fb79-11e6-be32-000d3a80d4c8
+2a44b64f-fb79-11e6-be32-000d3a80d4c8
+2a44b670-fb79-11e6-be32-000d3a80d4c8
+2a44b673-fb79-11e6-be32-000d3a80d4c8
+2a44b67c-fb79-11e6-be32-000d3a80d4c8
+2a44b67f-fb79-11e6-be32-000d3a80d4c8
+2a44b680-fb79-11e6-be32-000d3a80d4c8
+2a44b683-fb79-11e6-be32-000d3a80d4c8
+2a44b68c-fb79-11e6-be32-000d3a80d4c8
+2a44b68f-fb79-11e6-be32-000d3a80d4c8
+2a44b6b0-fb79-11e6-be32-000d3a80d4c8
+2a44b6b3-fb79-11e6-be32-000d3a80d4c8
+2a44b6bc-fb79-11e6-be32-000d3a80d4c8
+2a44b6bf-fb79-11e6-be32-000d3a80d4c8
+{% endhighlight %}
+
+这是因为UUID自身的生成算法用的是[**UUID Version 1**](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_1_.28date-time_and_MAC_address.29)，其中最低的48位用于标识机器上，其次有14位随机数，高位是拆分后的60位时间戳。在[Python](https://docs.python.org/3.5/library/uuid.html#uuid.uuid1)的实现中，默认情况下，仅有时间戳会发生变化——直接导致了时间相近时，碰撞容易多次发生。
+
+改进的方法可以通过为UUID Version 1强制生成14位随机数来减小碰撞的概率，亦可放弃机器特征信息直接使用完全由随机数构成的[**UUID Version 4**](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_.28random.29)生成算法。
