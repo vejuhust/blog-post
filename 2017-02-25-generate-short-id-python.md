@@ -43,7 +43,7 @@ def generate_short_id():
 
 这样的处理会导致唯一的ID数从3.403×10<sup>38</sup>种降低到了1.845×10<sup>19</sup>种，但在这种情况下够用了。使用XOR而不是OR或AND运算，是因为XOR运算的结果的信息熵更大。
 
-以16bit整数压缩为8bit为例，操作步骤见下表——
+以16位整数压缩为8位为例，操作步骤见下表——
 
 | Step | Action | Result |
 |:----:|:-------|:-------|
@@ -81,4 +81,35 @@ BFtY7Bs4bZM
 BFw7yEwowjc
 DlRk8ImsWwe
 DlQSCmFVMMW
+{% endhighlight %}
+
+
+## Version 2: Shuffled XOR UUID1
+
+上一版本中压缩为64位整数的操作使用了**外完美半理牌**(Outer Perfect Half Unshuffle)算法，考虑用类似的洗牌算法以减少指令数，即——将XOR运算结果的128位整数拆分为两个64位整数，将高位整数的有效位交错的插在低位整数有效位中，构成一个新的64位整数。
+
+以上一版本16位整数的中间结果`0B0D 0F0H 0J0L 0N0P`为例，拆分成`0B0D 0F0H`和`0J0L 0N0P`，交叉后构成8位整数`BJDL FNHP`。代码实现见下——
+
+{% highlight python %}
+from uuid import uuid1
+from basehash import base62
+
+def generate_short_id():
+    """ Short ID generator - v2: Shuffled XOR UUID1 """
+    num = uuid1().int
+    mask_shuffle = 0x55555555555555555555555555555555
+    mask_half = (1 << 64) - 1
+    result = (num ^ (num >> 1)) & mask_shuffle
+    result = ((mask_half & (result >> 64)) << 1) | (mask_half & result)
+    return base62().encode(result)
+{% endhighlight %}
+
+运行五次的结果如下，美好的11个字符——
+
+{% highlight text %}
+JpJ1kGrbKiQ
+JpJ1k7UGqKI
+JpJ1hhSz06E
+JpJ1hqqJUUM
+JbKp7Sn6t34
 {% endhighlight %}
