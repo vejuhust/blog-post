@@ -11,7 +11,7 @@ comments: true
 最近的一个项目需要大量生成唯一的ID，而且ID可能作为URL的一部分。事情很简单，经过略折腾，最后还是找到了令人满意的方法。(在Ubuntu 16.04.2环境中使用Python 3.5.2进行开发。)
 
 
-## Version 0: Base62 Encoded UUID1
+## Version 0: Base62-Encoded UUID1
 
 用Python完成这个最初的版本只用了一分钟，大体思想就是——用[UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier)保证ID的唯一性，用[Base62](https://de.wikipedia.org/wiki/Base62)编码确保不需要为URL转义。代码实现见下——
 
@@ -20,7 +20,7 @@ from uuid import uuid1
 from basehash import base62
 
 def generate_short_id():
-    """ Short ID generator - v0: Base62 Encoded UUID1 """
+    """ Short ID generator - v0: Base62-Encoded UUID1 """
     return base62().encode(uuid1().int)
 {% endhighlight %}
 
@@ -37,7 +37,7 @@ def generate_short_id():
 初步看起来是唯一的，但是明显的缺点是太长了，长达22个字符。
 
 
-## Version 1: Compressed XOR UUID1
+## Version 1: Half Unshuffled UUID1
 
 为了使最终的ID更短，可以考虑将128位的UUID压缩为64位。具体处理过程是——将UUID表示为128位bit的整数，对相邻两位bit进行XOR运算，将计算结果按序拼成64位bit的整数。
 
@@ -60,10 +60,9 @@ from uuid import uuid1
 from basehash import base62
 
 def generate_short_id():
-    """ Short ID generator - v1: Half Unshuffle UUID1 """
-    num = uuid1().int
-    mask = 0x55555555555555555555555555555555
-    x = (num ^ (num >> 1)) & mask
+    """ Short ID generator - v1: Half Unshuffled UUID1 """
+    n = uuid1().int
+    x = (n ^ (n >> 1))  & 0x55555555555555555555555555555555
     x = (x | (x >> 1))  & 0x33333333333333333333333333333333
     x = (x | (x >> 2))  & 0x0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F
     x = (x | (x >> 4))  & 0x00FF00FF00FF00FF00FF00FF00FF00FF
@@ -97,10 +96,9 @@ from basehash import base62
 def generate_short_id():
     """ Short ID generator - v2: Shuffled XOR UUID1 """
     num = uuid1().int
-    mask_shuffle = 0x55555555555555555555555555555555
-    mask_half = (1 << 64) - 1
-    result = (num ^ (num >> 1)) & mask_shuffle
-    result = ((mask_half & (result >> 64)) << 1) | (mask_half & result)
+    mask = (1 << 64) - 1
+    result = (num ^ (num >> 1)) & 0x55555555555555555555555555555555
+    result = ((mask & (result >> 64)) << 1) | (mask & result)
     return base62().encode(result)
 {% endhighlight %}
 
@@ -165,10 +163,9 @@ from basehash import base62
 def generate_short_id():
     """ Short ID generator - v3: Shuffled XOR UUID4 """
     num = uuid4().int
-    mask_shuffle = 0x55555555555555555555555555555555
-    mask_half = (1 << 64) - 1
-    result = (num ^ (num >> 1)) & mask_shuffle
-    result = ((mask_half & (result >> 64)) << 1) | (mask_half & result)
+    mask = (1 << 64) - 1
+    result = (num ^ (num >> 1)) & 0x55555555555555555555555555555555
+    result = ((mask & (result >> 64)) << 1) | (mask & result)
     return base62().encode(result)
 {% endhighlight %}
 
@@ -280,7 +277,7 @@ Dh3aVhCtQUm
 可以看出在当前环境下Version 4的效率是最高的。同时也发现了Base62编码部分是性能的瓶颈，可以进一步优化。
 
 
-## Version 5: Base62 Encoded Urandom
+## Version 5: Base62-Encoded Urandom
 
 既然发现Base62编码部分有性能瓶颈，那么就来查阅一下所使用的[BaseHash库的源代码](https://github.com/bnlucas/python-basehash)。我发现问题出在类的[初始化过程](https://github.com/bnlucas/python-basehash/blob/a79581fda56895e65bdada92d90e70ca45f00c06/basehash/__init__.py#L31)上(代码见下)——无论是否会使用`hash`或`unhash`，初始化`base62`时都不可以避免的需要执行这个费时`next_prime`：
 
@@ -296,14 +293,14 @@ from os import urandom
 from struct import unpack
 
 def generate_short_id():
-    """ Short ID generator - v5: Urandom in Base62 """
+    """ Short ID generator - v5: Base62-Encoded Urandom """
     num = unpack("<Q", urandom(8))[0]
     if num <= 0:
         result = "0"
     else:
         alphabet = string.digits + string.ascii_uppercase + string.ascii_lowercase
         key = []
-        while num:
+        while num > 0:
             num, rem = divmod(num, 62)
             key.append(alphabet[rem])
         result = "".join(reversed(key))
