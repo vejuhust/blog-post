@@ -8,12 +8,14 @@ comments: true
 ---
 
 
-最近的一个项目需要大量生成唯一的ID，而且ID可能作为URL的一部分。事情很简单，经过略折腾，最后还是找到了令人满意的方法。(在Ubuntu 16.04.2环境中使用Python 3.5.2进行开发。)
+最近的一个项目需要大量生成唯一的ID，而且ID可以作为URL的一部分。需求很简单，实现稍曲折，最后还是找到了令人满意的方法。
+
+实验环境是一台[Standard D3_v2](https://azure.microsoft.com/en-us/pricing/details/virtual-machines/series/#d-series)规模的Azure虚拟机，使用是Ubuntu 16.04.1操作系统，Python的版本是3.5.2。
 
 
 ## Version 0: Base62-Encoded UUID1
 
-用Python完成这个最初的版本只用了一分钟，大体思想就是——用[UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier)保证ID的唯一性，用[Base62](https://de.wikipedia.org/wiki/Base62)编码确保不需要为URL转义。代码实现见下——
+用Python实现这个初步的版本只需一分钟，大体思想就是——用[UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier)保证ID的唯一性，用[Base62](https://de.wikipedia.org/wiki/Base62)编码确保用于URL时不需要转义。代码实现见下——
 
 {% highlight python %}
 from uuid import uuid1
@@ -34,23 +36,23 @@ def generate_short_id():
 4u0bvgTdw9pLlzyVA0Ou20
 {% endhighlight %}
 
-初步看起来是唯一的，但是明显的缺点是太长了，长达22个字符。
+初步看起来是唯一的，但是缺点是明显太长了，平均22个字符的长度。
 
 
 ## Version 1: Half Unshuffled UUID1
 
-为了使最终的ID更短，可以考虑将128位的UUID压缩为64位。具体处理过程是——将UUID表示为128位bit的整数，对相邻两位bit进行XOR运算，将计算结果按序拼成64位bit的整数。
+为了使生成的ID更短，可以考虑将128位的UUID压缩为64位。具体处理过程是——将UUID表示为128位bit的整数，对相邻两位bit进行XOR运算，将计算结果按序拼成64位bit的整数。
 
-这样的处理会导致唯一的ID数从3.403×10<sup>38</sup>种降低到了1.845×10<sup>19</sup>种，但在这种情况下够用了。使用XOR而不是OR或AND运算，是因为XOR运算的结果的信息熵更大。
+这样的处理会导致理论上可以生成的唯一ID的总数从3.403×10<sup>38</sup>种降低到了1.845×10<sup>19</sup>种，但在当前情况下绝对够用了。使用XOR而不是OR或AND运算，是因为XOR运算结果的信息熵更大。
 
 以16位整数压缩为8位为例，操作步骤见下表——
 
-| Step | Action | Result |
-|:----:|:-------|:-------|
-|   1  | `num`  | `abcd efgh ijkl mnop` |
-|   2  | `num >> 1`  | `0abc defg hijk lmno` |
-|   3  | `num` XOR `num >> 1` | `ABCD EFGH IJKL MNOP` |
-|   4  | AND mask `0x5555`  | `0B0D 0F0H 0J0L 0N0P` |
+| Step | Action                 | Result                |
+|:----:|:-----------------------|:----------------------|
+|   1  | Get `num`              | `abcd efgh ijkl mnop` |
+|   2  | Get `num >> 1`         | `0abc defg hijk lmno` |
+|   3  | `num` XOR `num >> 1`   | `ABCD EFGH IJKL MNOP` |
+|   4  | AND mask `0x5555`      | `0B0D 0F0H 0J0L 0N0P` |
 |   5  | Compress to the right  | `0000 0000 BDFH JLNP` |
 
 代码实现见下——
@@ -72,7 +74,7 @@ def generate_short_id():
     return base62().encode(x)
 {% endhighlight %}
 
-同样连续运行五次，产生的ID长度为11个字符，基本符合要求。
+同样连续运行五次，产生的ID平均长度约11个字符，基本符合对长度的要求。
 
 {% highlight text %}
 BFuq2iPRm9U
@@ -85,7 +87,7 @@ DlQSCmFVMMW
 
 ## Version 2: Shuffled XOR UUID1
 
-上一版本中压缩为64位整数的操作使用了**外完美半理牌**(Outer Perfect Half Unshuffle)算法，考虑用类似的洗牌算法以减少指令数，即——将XOR运算结果的128位整数拆分为两个64位整数，将高位整数的有效位交错的插在低位整数有效位中，构成一个新的64位整数。
+上一版本中压缩为64位整数的操作使用了**外完美半理牌**(Outer Perfect Half Unshuffle)算法，考虑用类似的洗牌算法以减少指令数，即——将XOR运算结果的128位整数拆分为两个64位整数，将高位整数的有效位交错地插在低位整数有效位中，构成一个新的64位整数。
 
 以上一版本16位整数的中间结果`0B0D 0F0H 0J0L 0N0P`为例，拆分成`0B0D 0F0H`和`0J0L 0N0P`，交叉后构成8位整数`BJDL FNHP`。代码实现见下——
 
@@ -102,7 +104,7 @@ def generate_short_id():
     return base62().encode(result)
 {% endhighlight %}
 
-运行五次的结果如下，美好的11个字符——
+运行五次的结果如下，依然是美好的11个字符——
 
 {% highlight text %}
 JpJ1kGrbKiQ
@@ -152,9 +154,9 @@ JbKp7Sn6t34
 2a44b6bf-fb79-11e6-be32-000d3a80d4c8
 {% endhighlight %}
 
-这是因为UUID自身的生成算法用的是[**UUID Version 1**](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_1_.28date-time_and_MAC_address.29)，其中最低的48位用于标识机器上，其次有14位随机数，高位是拆分后的60位时间戳。在[Python](https://docs.python.org/3.5/library/uuid.html#uuid.uuid1)的实现中，默认情况下，仅有时间戳会发生变化——直接导致了时间相近时，碰撞容易多次发生。
+出现这一情况是因为生成UUID时采用的是[**UUID Version 1**](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_1_.28date-time_and_MAC_address.29)生成算法，其中最低的48位用于标识机器上，其次有14位随机数，高位是拆分后的60位时间戳。在[Python](https://docs.python.org/3.5/library/uuid.html#uuid.uuid1)的实现中，默认情况下仅有时间戳会发生变化——直接导致了时间相近时，碰撞容易多次发生。
 
-可以通过为UUID Version 1强制生成14位随机数来减小碰撞的概率来进行改进，亦可放弃机器特征信息直接使用完全由随机数构成的[**UUID Version 4**](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_.28random.29)生成算法。后者的代码实现如下——
+直接的改进方案是通过为UUID Version 1强制生成14位随机数来减小碰撞的概率，亦可放弃机器特征信息直接使用完全由随机数实现的[**UUID Version 4**](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_.28random.29)生成算法。基于后者的代码实现如下——
 
 {% highlight python %}
 from uuid import uuid4
@@ -184,9 +186,9 @@ L08tR6LLDqM
 
 ## Version 4: Urandom
 
-既然只需要64位整数，是否可以在UUID生成的时候进行缩减呢？我查阅了一下[Python源代码](https://www.python.org/downloads/source/)中`uuid4`的实现。Python以2.7.11和3.5.1版本为界，前后主要有两个版本的实现——
+既然只需要64位整数，是否可以在UUID生成的时候进行缩减呢？我查阅了[Python源代码](https://www.python.org/downloads/source/)中对`uuid4`函数的实现。Python以2.7.11和3.5.1版本为界，前后主要有两个显著不同的`uuid4`函数的实现版本——
 
-Python 3.5.0的`/Lib/uuid.py`中`uuid4`的实现如下：
+Python 3.5.0的`/Lib/uuid.py`中`uuid4`函数的实现如下：
 
 {% highlight python %}
 def uuid4():
@@ -207,7 +209,7 @@ def uuid4():
         return UUID(int=random.getrandbits(128), version=4)
 {% endhighlight %}
 
-而Python 3.5.1的`/Lib/uuid.py`中`uuid4`的实现则变成了：
+而Python 3.5.1中`uuid4`的实现则变成了：
 
 {% highlight python %}
 def uuid4():
@@ -215,7 +217,7 @@ def uuid4():
     return UUID(bytes=os.urandom(16), version=4)
 {% endhighlight %}
 
-两者的主要区别在于前者在`urandom`的基础上，还调用libuuid库和`random`伪随机数两种方法。但这一实现在2015年10月底提出的[Issue 25515](https://bugs.python.org/issue25515)中被认为不够安全高效，并被[修改](https://bugs.python.org/review/25515/)为[目前](https://github.com/python/cpython/blob/master/Lib/uuid.py)仅使用`urandom`的版本。
+两者的主要区别在于前者在`urandom`函数的基础上，还调用libuuid库和`random`伪随机数两种方法。但这一实现在2015年10月底的[Issue 25515](https://bugs.python.org/issue25515)中被认为不够安全高效，并被[修改](https://bugs.python.org/review/25515/)为[目前](https://github.com/python/cpython/blob/master/Lib/uuid.py)仅使用`urandom`函数的版本。
 
 参照此方法仅用[urandom](https://docs.python.org/3.5/library/os.html#os.urandom)实现，同样一行代码解决问题——
 
@@ -229,7 +231,7 @@ def generate_short_id():
     return base62().encode(unpack("<Q", urandom(8))[0])
 {% endhighlight %}
 
-连续运行五次的结果如下，碰撞结果也令人满意——
+连续运行五次的结果如下，零碰撞的结果也令人满意——
 
 {% highlight text %}
 JWDypmB3wt
@@ -242,9 +244,9 @@ Dh3aVhCtQUm
 
 # Evaluation
 
-既然唯一性的问题已经解决，那么来重新观察一下各个版本产生ID的实际长度。基于单机生成的100,000个不同ID的统计结果如下——
+唯一性的问题已经解决，现在来重新评估一下各个版本产生ID的实际长度。在单机上用以上各个版本各生成200,000个不同的ID，ID长度的统计结果如下——
 
-| ver.             | len=8            | len=9            | len=10           | len=11           | len=21           | avg. len.        |
+| ver. <pending>   | len=8            | len=9            | len=10           | len=11           | len=21           | avg. len.        |
 |:----------------:|:----------------:|:----------------:|:----------------:|:----------------:|:----------------:|:----------------:|
 | v0               | 0 / 0%           | 0 / 0%           | 0 / 0%           | 0 / 0%           | 100000 / 100%    | 21               |
 | v1               | 2 / 0.002%       | 78 / 0.078%      | 4614 / 4.614%    | 95306 / 95.306%  | 0 / 0%           | 10.952           |
@@ -264,7 +266,7 @@ Dh3aVhCtQUm
 | v3               | 235.845µs        | 234.734µs        | 235.397µs        | 235.122µs        | 235.229µs        |
 | v4               | 224.070µs        | 224.375µs        | 225.760µs        | 226.288µs        | 225.901µs        |
 
-各个版本的平均耗时在数量上相差不多，主要是因为Base62编码过程相对耗时，省去这一过程，测得的结果如下——
+各个版本的平均耗时在数量上相差不大，主要是因为Base62编码过程相对耗时，共同减去这一过程，测得的结果如下——
 
 | ver.             | times=10000      | times=50000      | times=100000     | times=200000     | times=500000     |
 |:----------------:|:----------------:|:----------------:|:----------------:|:----------------:|:----------------:|
@@ -274,18 +276,18 @@ Dh3aVhCtQUm
 | v3_raw           | 4.458µs          | 4.602µs          | 4.609µs          | 4.638µs          | 4.656µs          |
 | v4_raw           | 1.269µs          | 1.309µs          | 1.312µs          | 1.303µs          | 1.311µs          |
 
-可以看出在当前环境下Version 4的效率是最高的。同时也发现了Base62编码部分是性能的瓶颈，可以进一步优化。
+可以看出在当前环境下Version 4的效率是最高的。同时也发现了Base62编码部分是性能的瓶颈，需要进一步优化。
 
 
 ## Version 5: Base62-Encoded Urandom
 
-既然发现Base62编码部分有性能瓶颈，那么就来查阅一下所使用的[BaseHash库的源代码](https://github.com/bnlucas/python-basehash)。我发现问题出在类的[初始化过程](https://github.com/bnlucas/python-basehash/blob/a79581fda56895e65bdada92d90e70ca45f00c06/basehash/__init__.py#L31)上(代码见下)——无论是否会使用`hash`或`unhash`，初始化`base62`时都不可以避免的需要执行这个费时`next_prime`：
+在查阅了Base62所使用的[BaseHash库](https://github.com/bnlucas/python-basehash)的源代码后，我发现瓶颈在于类的[初始化过程](https://github.com/bnlucas/python-basehash/blob/a79581fda56895e65bdada92d90e70ca45f00c06/basehash/__init__.py#L31)上（代码见下）——无论是否会使用`hash`或`unhash`函数，初始化`base62`类时都不可以避免的需要执行这个费时`next_prime`：
 
 {% highlight python %}
 self.prime = next_prime(int((self.maximum + 1) * self.generator))
 {% endhighlight %}
 
-尝试在**site-packages/basehash/__init__.py**中把这行赋值改为`None`，性能瞬间提高了。当然，这样hack并不能成为正式的方案，于是我将Base62编码直接替换手写的简单版本，不再依赖BaseHash库。代码见下——
+尝试在**site-packages/basehash/__init__.py**中把这行赋值改为`None`，性能瞬间提高了。当然，这样hack并不能成为正式的方案，于是考虑将Base62编码直接替换手写的简单版本，不再依赖BaseHash库。代码实现见下——
 
 {% highlight python %}
 import string
