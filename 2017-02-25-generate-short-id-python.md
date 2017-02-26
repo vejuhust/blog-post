@@ -185,7 +185,7 @@ L08tR6LLDqM
 另在单机上测试了8,000,000次，无任何碰撞。
 
 
-## Version 4:
+## Version 4: Urandom
 
 既然只需要64位整数，是否可以在UUID生成的时候进行缩减呢？我查阅了一下[Python源代码](https://www.python.org/downloads/source/)中`uuid4`的实现。Python以2.7.11和3.5.1版本为界，前后主要有两个版本的实现——
 
@@ -277,4 +277,46 @@ Dh3aVhCtQUm
 | v3               | 4.458µs          | 4.602µs          | 4.609µs          | 4.638µs          | 4.656µs          |
 | v4               | 1.269µs          | 1.309µs          | 1.312µs          | 1.303µs          | 1.311µs          |
 
-可以看出在当前环境下Version 4的效率是最高的。同时也发现了性能的瓶颈在Base62编码，可以作为下一步的突破口。
+可以看出在当前环境下Version 4的效率是最高的。同时也发现了Base62编码部分是性能的瓶颈，可以进一步优化。
+
+
+## Version 5: Base62 Encoded Urandom
+
+既然发现Base62编码部分有性能瓶颈，那么就来查阅一下所使用的[BaseHash库的源代码](https://github.com/bnlucas/python-basehash)。我发现问题出在类的[初始化过程](https://github.com/bnlucas/python-basehash/blob/a79581fda56895e65bdada92d90e70ca45f00c06/basehash/__init__.py#L31)上(代码见下)——无论是否会使用`hash`或`unhash`，初始化`base62`时都不可以避免的需要执行这个费时`next_prime`：
+
+{% highlight python %}
+self.prime = next_prime(int((self.maximum + 1) * self.generator))
+{% endhighlight %}
+
+尝试在**site-packages/basehash/__init__.py**中把这行赋值改为`None`，性能瞬间提高了。当然，这样hack并不能成为正式的方案，于是我将Base62编码直接替换手写的简单版本，不再依赖BaseHash库。代码见下——
+
+{% highlight python %}
+import string
+from os import urandom
+from struct import unpack
+
+def generate_short_id():
+    """ Short ID generator - v5: Urandom in Base62 """
+    num = unpack("<Q", urandom(8))[0]
+    if num <= 0:
+        result = "0"
+    else:
+        alphabet = string.digits + string.ascii_uppercase + string.ascii_lowercase
+        key = []
+        while num:
+            num, rem = divmod(num, 62)
+            key.append(alphabet[rem])
+        result = "".join(reversed(key))
+    return result
+{% endhighlight %}
+
+和前一版本的性能对比数据如下——
+
+| ver.             | times=10000      | times=50000      | times=100000     | times=200000     | times=500000     |
+|:----------------:|:----------------:|:----------------:|:----------------:|:----------------:|:----------------:|
+| v4_raw           | 1.210µs          | 1.219µs          | 1.209µs          | 1.232µs          | 1.237µs          |
+| v5_raw           | 1.188µs          | 1.195µs          | 1.188µs          | 1.220µs          | 1.221µs          |
+| v4               | 224.785µs        | 221.538µs        | 222.862µs        | 223.577µs        | 223.554µs        |
+| v5               | 5.216µs          | 5.140µs          | 5.134µs          | 5.119µs          | 5.153µs          |
+
+结果非常理想，相对前一版本达到了43倍的性能提升，平均每秒可以产生19万ID。
