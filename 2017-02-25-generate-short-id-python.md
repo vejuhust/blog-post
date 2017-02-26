@@ -8,7 +8,7 @@ comments: true
 ---
 
 
-最近的一个项目需要大量生成唯一的ID，而且ID可以作为URL的一部分。需求很简单，实现稍曲折，最后还是找到了令人满意的方法。
+最近的一个项目需要大量生成唯一的ID，而且ID可以作为URL的一部分。需求很简单，实现稍曲折，最终还是找到了令人满意的方法。
 
 实验环境是一台[Standard D3_v2](https://azure.microsoft.com/en-us/pricing/details/virtual-machines/series/#d-series)规模的Azure虚拟机，使用是Ubuntu 16.04.1操作系统，Python的版本是3.5.2。
 
@@ -217,7 +217,7 @@ def uuid4():
     return UUID(bytes=os.urandom(16), version=4)
 {% endhighlight %}
 
-两者的主要区别在于前者在`urandom`函数的基础上，还调用libuuid库和`random`伪随机数两种方法。但这一实现在2015年10月底的[Issue 25515](https://bugs.python.org/issue25515)中被认为不够安全高效，并被[修改](https://bugs.python.org/review/25515/)为[目前](https://github.com/python/cpython/blob/master/Lib/uuid.py)仅使用`urandom`函数的版本。
+两者的主要区别在于前者在`urandom`函数的基础上，还调用libuuid库和`random`伪随机数两种方法。但这一实现在2015年10月底的[Issue 25515](https://bugs.python.org/issue25515)中被认为不够安全高效，并被[修改](https://bugs.python.org/review/25515/)为[目前仅使用`urandom`函数的版本](https://github.com/python/cpython/blob/master/Lib/uuid.py)。
 
 参照此方法仅用[urandom](https://docs.python.org/3.5/library/os.html#os.urandom)实现，同样一行代码解决问题——
 
@@ -246,13 +246,13 @@ Dh3aVhCtQUm
 
 唯一性的问题已经解决，现在来重新评估一下各个版本产生ID的实际长度。在单机上用以上各个版本各生成200,000个不同的ID，ID长度的统计结果如下——
 
-| ver. <pending>   | len=8            | len=9            | len=10           | len=11           | len=21           | avg. len.        |
+| ver.             | len=8            | len=9            | len=10           | len=11           | len=22           | avg. len.        |
 |:----------------:|:----------------:|:----------------:|:----------------:|:----------------:|:----------------:|:----------------:|
-| v0               | 0 / 0%           | 0 / 0%           | 0 / 0%           | 0 / 0%           | 100000 / 100%    | 21               |
-| v1               | 2 / 0.002%       | 78 / 0.078%      | 4614 / 4.614%    | 95306 / 95.306%  | 0 / 0%           | 10.952           |
-| v2               | 0 / 0%           | 0 / 0%           | 0 / 0%           | 100000 / 100%    | 0 / 0%           | 11               |
-| v3               | 0 / 0%           | 0 / 0%           | 0 / 0%           | 100000 / 100%    | 0 / 0%           | 11               |
-| v4               | 2 / 0.002%       | 70 / 0.07%       | 4580 / 4.58%     | 95348 / 95.348%  | 0 / 0%           | 10.953           |
+| v0               | 0 / 0%           | 0 / 0%           | 0 / 0%           | 0 / 0%           | 200000 / 100%    | 22               |
+| v1               | 4 / 0.002%       | 142 / 0.071%     | 8774 / 4.387%    | 191080 / 95.54%  | 0 / 0%           | 10.955           |
+| v2               | 0 / 0%           | 0 / 0%           | 0 / 0%           | 200000 / 100%    | 0 / 0%           | 11               |
+| v3               | 0 / 0%           | 0 / 0%           | 0 / 0%           | 200000 / 100%    | 0 / 0%           | 11               |
+| v4               | 0 / 0%           | 148 / 0.074%     | 8931 / 4.466%    | 190921 / 95.461% | 0 / 0%           | 10.954           |
 
 由上表可以看出，在当前环境下Version 4产生的ID平均长度最短。长度不均是因为整数高位的0在Base62编码过程中被省略了。例如，0x0013c3bb0fd02d5c编码后的长度为9个字符，而0xe05dc018dbcac150则为11个字符。
 
@@ -319,3 +319,10 @@ def generate_short_id():
 | v5               | 5.216µs          | 5.140µs          | 5.134µs          | 5.119µs          | 5.153µs          |
 
 结果非常理想，相对前一版本达到了43倍的性能提升，平均每秒可以产生19万ID。
+
+
+## Conclusion
+
+Version 5就是最终的版本，它在长度、唯一性和效率上均已符合我的预期。完整的源代码和实验脚本，可以[从这儿下载](https://github.com/vejuhust/blog-code/tree/master/python-short-id-generator)。
+
+马斯洛（[Abraham Maslow](https://en.wikipedia.org/wiki/Abraham_Maslow)）说过一句名言“In any given moment we have two options: to step forward into growth or back into safety.”。这说的大概也是我们工程师的日常吧——是往前一步在挑战中成长，还是退回到安全区就此妥协。
