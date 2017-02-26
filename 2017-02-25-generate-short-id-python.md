@@ -10,7 +10,7 @@ comments: true
 
 最近的一个项目需要大量生成唯一的ID，而且ID可以作为URL的一部分。需求很简单，实现稍曲折，最终还是找到了令人满意的方法。
 
-实验环境是一台[Standard D3_v2](https://azure.microsoft.com/en-us/pricing/details/virtual-machines/series/#d-series)规模的Azure虚拟机，使用是Ubuntu 16.04.1操作系统，Python的版本是3.5.2。
+实验基于一台[Standard D3_v2](https://azure.microsoft.com/en-us/pricing/details/virtual-machines/series/#d-series)规模的Azure虚拟机，使用Ubuntu 16.04.1操作系统，Linux内核版本是4.4.0-64-generic，Python版本是3.5.2。
 
 
 ## Version 0: Base62-Encoded UUID1
@@ -276,7 +276,7 @@ Dh3aVhCtQUm
 | v3_raw           | 4.458µs          | 4.602µs          | 4.609µs          | 4.638µs          | 4.656µs          |
 | v4_raw           | 1.269µs          | 1.309µs          | 1.312µs          | 1.303µs          | 1.311µs          |
 
-可以看出在当前环境下Version 4的效率是最高的。同时也发现了Base62编码部分是性能的瓶颈，需要进一步优化。
+可以看出在当前环境下Version 4的效率是最高的，同时也发现Base62编码部分是性能的瓶颈，需要进一步优化。
 
 
 ## Version 5: Base62-Encoded Urandom
@@ -323,6 +323,6 @@ def generate_short_id():
 
 ## Conclusion
 
-Version 5就是最终的版本，它在长度、唯一性和效率上均已符合我的预期。完整的源代码和实验脚本，可以[从这儿下载](https://github.com/vejuhust/blog-code/tree/master/python-short-id-generator)。
+Version 5就是最终的版本，它在长度、唯一性和效率上均已符合我的预期。完整的源代码和实验脚本，可以[从GitHub下载](https://github.com/vejuhust/blog-code/tree/master/python-short-id-generator)。
 
-马斯洛（[Abraham Maslow](https://en.wikipedia.org/wiki/Abraham_Maslow)）说过一句名言“In any given moment we have two options: to step forward into growth or back into safety.”。这说的大概也是我们工程师的日常吧——是往前一步在挑战中成长，还是退回到安全区就此妥协。
+马斯洛（[Abraham Maslow](https://en.wikipedia.org/wiki/Abraham_Maslow)）说过一句名言*“In any given moment we have two options: to step forward into growth or back into safety.”*。这谈论的大概也是我们工程师的日常吧——是往前一步在挑战中成长，还是退回到安全区就此妥协。
