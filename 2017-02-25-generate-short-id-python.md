@@ -219,3 +219,25 @@ def uuid4():
 {% endhighlight %}
 
 两者的主要区别在于前者在`urandom`的基础上，还调用libuuid库和`random`伪随机数两种方法。但这一实现在2015年10月底提出的[Issue 25515](https://bugs.python.org/issue25515)中被认为不够安全高效，并被[修改](https://bugs.python.org/review/25515/)为[目前](https://github.com/python/cpython/blob/master/Lib/uuid.py)仅使用`urandom`的版本。
+
+参照此方法仅用[urandom](https://docs.python.org/3.5/library/os.html#os.urandom)实现，同样一行代码解决问题——
+
+{% highlight python %}
+from os import urandom
+from struct import unpack
+from basehash import base62
+
+def generate_short_id():
+    """ Short ID generator - v4: Urandom """
+    return base62().encode(unpack("<Q", urandom(8))[0])
+{% endhighlight %}
+
+连续运行五次的结果如下，碰撞结果也令人满意——
+
+{% highlight text %}
+JWDypmB3wt
+ANbbxzr6B4f
+AcNhBlo6G0S
+Dh3aVhCtQUm
+4dCcrJwi9VL
+{% endhighlight %}
