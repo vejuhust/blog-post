@@ -8,7 +8,7 @@ comments: true
 ---
 
 
-最近的一个项目需要大量生成唯一的ID，而且ID可能作为URL的一部分。事情很简单，经过略折腾，最后还是找到了令人满意的方法。
+最近的一个项目需要大量生成唯一的ID，而且ID可能作为URL的一部分。事情很简单，经过略折腾，最后还是找到了令人满意的方法。(在Ubuntu 16.04.2环境中使用Python 3.5.2进行开发。)
 
 
 ## Version 0: Base62 Encoded UUID1
@@ -49,7 +49,7 @@ def generate_short_id():
 |:----:|:-------|:-------|
 |   1  | `num`  | `abcd efgh ijkl mnop` |
 |   2  | `num >> 1`  | `0abc defg hijk lmno` |
-|   3  | `num ^ (num >> 1)` | `ABCD EFGH IJKL MNOP` |
+|   3  | `num` XOR `num >> 1` | `ABCD EFGH IJKL MNOP` |
 |   4  | AND mask `0x5555`  | `0B0D 0F0H 0J0L 0N0P` |
 |   5  | Compress to the right  | `0000 0000 BDFH JLNP` |
 
@@ -182,4 +182,40 @@ IPLt6fJLmPX
 L08tR6LLDqM
 {% endhighlight %}
 
-另在单机上测试了400,000次，无任何碰撞。
+另在单机上测试了8,000,000次，无任何碰撞。
+
+
+## Version 4:
+
+既然只需要64位整数，是否可以在UUID生成的时候进行缩减呢？我查阅了一下[Python源代码](https://www.python.org/downloads/source/)中`uuid4`的实现。Python以2.7.11和3.5.1版本为界，前后主要有两个版本的实现——
+
+Python 3.5.0的`/Lib/uuid.py`中`uuid4`的实现如下：
+
+{% highlight python %}
+def uuid4():
+    """Generate a random UUID."""
+
+    # When the system provides a version-4 UUID generator, use it.
+    if _uuid_generate_random:
+        _buffer = ctypes.create_string_buffer(16)
+        _uuid_generate_random(_buffer)
+        return UUID(bytes=bytes_(_buffer.raw))
+
+    # Otherwise, get randomness from urandom or the 'random' module.
+    try:
+        import os
+        return UUID(bytes=os.urandom(16), version=4)
+    except Exception:
+        import random
+        return UUID(int=random.getrandbits(128), version=4)
+{% endhighlight %}
+
+而Python 3.5.1的`/Lib/uuid.py`中`uuid4`的实现则变成了：
+
+{% highlight python %}
+def uuid4():
+    """Generate a random UUID."""
+    return UUID(bytes=os.urandom(16), version=4)
+{% endhighlight %}
+
+两者的主要区别在于前者在`urandom`的基础上，还调用libuuid库和`random`伪随机数两种方法。但这一实现在2015年10月底提出的[Issue 25515](https://bugs.python.org/issue25515)中被认为不够安全高效，并被[修改](https://bugs.python.org/review/25515/)为[目前](https://github.com/python/cpython/blob/master/Lib/uuid.py)仅使用`urandom`的版本。
