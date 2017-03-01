@@ -2,7 +2,7 @@
 layout: single
 title: "Generate Short Url-Friendly Unique ID in Python"
 excerpt: "My exploration for generation methods of shorter and unique ID"
-modified: 2017-02-25
+modified: 2017-03-01T04:32:51.233593
 tags: [python, develop, bitwise]
 comments: true
 ---
@@ -315,8 +315,10 @@ def generate_short_id():
 |:----------------:|:----------------:|:----------------:|:----------------:|:----------------:|:----------------:|
 | v4_raw           | 1.210µs          | 1.219µs          | 1.209µs          | 1.232µs          | 1.237µs          |
 | v5_raw           | 1.188µs          | 1.195µs          | 1.188µs          | 1.220µs          | 1.221µs          |
+|------
 | v4               | 224.785µs        | 221.538µs        | 222.862µs        | 223.577µs        | 223.554µs        |
 | v5               | 5.216µs          | 5.140µs          | 5.134µs          | 5.119µs          | 5.153µs          |
+{: rules="groups"}
 
 结果非常理想，相对前一版本达到了43倍的性能提升，平均每秒可以产生19万ID。
 
