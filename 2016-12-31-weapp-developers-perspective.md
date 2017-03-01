@@ -2,7 +2,7 @@
 layout: single
 title: "WeApp in WeChat: A Developer's Perspective"
 excerpt: "Introduction to framework of WeApp in WeChat, tips & tricks for developers."
-modified: 2017-01-02
+modified: 2017-03-01T04:19:54.577141
 tags: [wechat, develop, framework]
 comments: true
 ---
