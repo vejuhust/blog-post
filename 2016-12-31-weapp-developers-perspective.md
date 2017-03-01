@@ -34,15 +34,15 @@ comments: true
 ![Framework Inside App]({{ site.url }}{{ site.baseurl }}/images/photo/weapp-develop/overview-2.jpg)
 
 
-## View
+## 视图层 View
 
-小程序框架在[**View(视图层)**](https://mp.weixin.qq.com/debug/wxadoc/dev/framework/view/)执行开发者编写的WXML和WXSS代码，并将其展示为WebView上的组件。
+小程序框架在[**View(视图层)**](https://mp.weixin.qq.com/debug/wxadoc/dev/framework/view/)执行开发者编写的WXML和WXSS代码，将其渲染为WebView上的组件。
 
 ### Page Frame
 
-小程序所使用的WebView被称为**Page Frame**，每个Page Frame占用1个线程，并独立初始化。每个小程序最多可以同时启动9个Page Frame线程，即最多5层的页面栈加上最多5个tabBar(第一个tabBar同属于页面栈最底层)。
+小程序所使用的WebView被称为**Page Frame**，每个Page Frame占用1个线程，独立进行初始化。每个小程序最多可以同时启动9个Page Frame线程，即最多5层的页面栈加上最多5个tabBar(第一个tabBar同属于页面栈最底层)。
 
-打开页面时，Native(系统层)会额外预加载一个WebView，并用类似以下的HTML代码进行初始化。这个初始化过程花费大约100ms，加载在`<script/>`中的JavaScript代码包含小程序框架自身的代码以及被编译后的所有页面的WXML和WXSS代码。初始化完成后，这个WebView会被闲置，直到需要打开新的页面，Page Frame收到指令后会去执行`<script/>`中的代码并结合App Service中定义的初始数据将其指定的具体页面内容渲染在`<body/>`中，其过程无需请求额外资源，这一步骤同样需要100ms时间。上述过程在后台执行完毕之后，才会将页面推到前台真正展现给用户。Page Frame机制提高了小程序页面的切换速度，保证其体验与传统Web App相比更加流畅。
+打开页面时，Native(系统层)会额外预加载一个WebView，并用类似以下的HTML代码为基础进行初始化。这个初始化过程花费大约100ms，加载在`<script/>`中的JavaScript代码包含小程序框架自身的代码以及被编译后的所有页面的WXML和WXSS代码。这个WebView在初始化完成后会被闲置，直到需要打开新的页面。Page Frame收到打开新的页面指令后会去执行`<script/>`中的代码并结合App Service提供的初始数据将其指定的具体页面内容渲染在`<body/>`中，其过程无需请求额外资源，这一步骤同样需要100ms时间。上述过程在后台执行完毕之后，才会将页面推到前台真正展现给用户。Page Frame机制提高了小程序页面的切换速度，保证其体验比传统Web App更加流畅。
 
 {% highlight html %}
 <html>
@@ -60,7 +60,7 @@ comments: true
 
 ### WXML
 
-[WXML](https://mp.weixin.qq.com/debug/wxadoc/dev/framework/view/wxml/)即**W**ei**X**in **M**arkup **L**anguage是微信基于XML和[{% raw %}{{ mustache }}{% endraw %}](https://mustache.github.io/)设计的用于描述小程序页面结构和绑定的标签语言。它的作用类似HTML，但具有算术运算、逻辑运算、模板和引用的能力。样例见下：
+[WXML](https://mp.weixin.qq.com/debug/wxadoc/dev/framework/view/wxml/)，即**W**ei**X**in **M**arkup **L**anguage，是微信基于XML和[{% raw %}{{ mustache }}{% endraw %}](https://mustache.github.io/)设计的用于描述小程序页面结构和绑定的标签语言。它的作用类似HTML，但具有算术运算、逻辑运算、模板和引用的能力。样例见下：
 
 {% highlight xml %}
 {% raw %}
@@ -68,12 +68,12 @@ comments: true
 {% endraw %}
 {% endhighlight %}
 
-微信编译器会将开发者编写的WXML代码编译成JavaScript代码，为各个页面生成相对应的`generateFunc`，其输入是来自App Service的数据，输出则是对应的Virtual Tree，后者由经Virtual DOM算法将更新体现真实的DOM Tree上。
+微信编译器会将开发者编写的WXML代码编译成JavaScript代码，为各个页面生成相对应的`generateFunc`，其输入是来自App Service的数据，输出则是对应的Virtual Tree，后者由经Virtual DOM算法将更新体现在真实的DOM Tree上。
 
 
 ### WXSS
 
-[WXSS](https://mp.weixin.qq.com/debug/wxadoc/dev/framework/view/wxss.html)即**W**ei**X**in **S**tyle **S**heets是微信基于CSS设计的用于描述小程序页面样式的语言。它具有CSS大部分特性(不支持级联，以保护组件内部样式)，并在此基础上增加了自适应单位**RPX** (Responsive Pixel)以及`@import`语法导入外联样式表。样例见下：
+[WXSS](https://mp.weixin.qq.com/debug/wxadoc/dev/framework/view/wxss.html)，即**W**ei**X**in **S**tyle **S**heets，是微信基于CSS设计的用于描述小程序页面样式的语言。它具有CSS大部分特性(目前不支持级联，为了保护组件内部样式)，并在此基础上增加了自适应单位**RPX** (Responsive Pixel)以及`@import`语法导入外联样式表。样例见下：
 
 {% highlight css %}
 @import "common.wxss";
@@ -82,12 +82,12 @@ comments: true
 }
 {% endhighlight %}
 
-微信编译器同样会将开发者编写的WXSS代码编译成JavaScript代码，微信客户端通过执行JavaScript代码来生成相应的CSS，会根据具体机型将rpx转化为相适应的px。
+微信编译器同样会将开发者编写的WXSS代码编译成JavaScript代码，微信客户端通过执行JavaScript代码来生成相应的CSS，会根据具体机型将rpx转化为相对应的px。
 
 
 ### Component
 
-微信参考[Polymer](https://www.polymer-project.org/1.0/)设计了[WX Component](https://mp.weixin.qq.com/debug/wxadoc/dev/component/)组件系统为开发者提供了基础组件，以便通过组合的方式进行快速开发。这种设计隔离了开发者的代码和底层具体的渲染方式，方便未来移植到新的平台，并支持自定义事件。
+微信参考[Polymer](https://www.polymer-project.org/1.0/)设计了[WX Component](https://mp.weixin.qq.com/debug/wxadoc/dev/component/)组件系统为开发者提供了小程序基础组件，以便通过组合的方式进行快速开发。这种设计隔离了开发者的代码和底层具体的渲染方式，方便未来移植到新的平台，并支持自定义事件。
 
 大部分组件是基于HTML在WebView内直接实现的，小部分组件的实现是在WebView层上覆盖了Native层(目前有下列四个组件是这样实现的)。因而微信小程序并不再是纯粹的Web App，而是一种Web+Native的Hybrid应用。
 
@@ -97,9 +97,9 @@ comments: true
 * `<textarea/>` - [多行输入框](https://mp.weixin.qq.com/debug/wxadoc/dev/component/textarea.html)
 
 
-## App Service
+## 逻辑层 App Service
 
-[**App Service(逻辑层)**](https://mp.weixin.qq.com/debug/wxadoc/dev/framework/app-service/)是小程序框架的基础，它执行开发者用JavaScript编写的业务逻辑代码，并帮助View(视图层)与Native(系统层)交互。它还承担了数据绑定、事件分发、路由管理和生命周期管理的职责。开发者需要在App Service中编写[`App()`](https://mp.weixin.qq.com/debug/wxadoc/dev/framework/app-service/app.html)和[`Page()`](https://mp.weixin.qq.com/debug/wxadoc/dev/framework/app-service/page.html)方法来完成对小程序自身和每个页面的注册。
+[**App Service(逻辑层)**](https://mp.weixin.qq.com/debug/wxadoc/dev/framework/app-service/)是小程序框架的基础，它执行开发者用JavaScript编写的业务逻辑代码，并帮助View(视图层)与Native(系统层)交互。它还承担了数据绑定、事件分发、路由管理和生命周期管理的职责。开发者需要在App Service中编写[`App()`](https://mp.weixin.qq.com/debug/wxadoc/dev/framework/app-service/app.html)和[`Page()`](https://mp.weixin.qq.com/debug/wxadoc/dev/framework/app-service/page.html)方法来分别完成对小程序自身和每个页面的注册。
 
 ### Binding
 
