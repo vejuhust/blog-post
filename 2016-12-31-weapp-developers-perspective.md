@@ -8,25 +8,25 @@ comments: true
 ---
 
 
-微信小程序可以看做是微信对其自身平台上Web App(即HTML5应用)进行规范化的措施，它通过流量、性能和效率吸引开发者，同时满足了微信对内容审核和生态建立的需求。
+微信小程序可以看做是微信对其自身平台上Web App(俗称H5应用)进行规范化的措施，它通过流量、性能和效率吸引开发者，同时满足了微信对内容审核和生态建立的需求。
 
-我参加了微信商学院11月23日在北京和12月20日在上海举办的两场开发者培训班，也与同事合作进行了两场公司内部的分享。这篇文章记录了对微信小程序框架的解析(基于微信客户端[iOS 6.5.2](https://itunes.apple.com/us/app/wechat/id414478124?mt=8)和[Android 6.3.32](https://play.google.com/store/apps/details?id=com.tencent.mm)版本)，以及在开发实战中总结的技巧。部分内容根据微信工程师胡浩的讲课整理而成。
+2016年末，我参加了微信商学院11月23日在北京和12月20日在上海举办的两场开发者培训班，也与同事合作进行了两场公司内部的分享。这篇文章记录了对微信小程序框架的解析(基于微信客户端[iOS 6.5.2](https://itunes.apple.com/us/app/wechat/id414478124?mt=8)和[Android 6.3.32](https://play.google.com/store/apps/details?id=com.tencent.mm)版本)，以及在开发实战中的经验总结。部分内容根据微信工程师胡浩的讲课整理而成。
 
 
-## Overview
+## 概况 Overview
 
 作为基于且依赖微信的[小程序框架](https://mp.weixin.qq.com/debug/wxadoc/dev/framework/MINA.html)，其目标是通过类Web技术为开发者在微信中开发出媲美原生App的应用提供了一整套解决方案。
 
-小程序框架在微信客户端上由三部分组成：**View(视图层)**、**App Service(逻辑层)**和**Native(系统层)**。View和App Service构成了一个单向的数据绑定系统，在客户端内部通过Data和Event交互。App Service通过JSBridge与Native通讯调用微信客户端的原生能力。小程序与外部服务的通讯全部由Native承担——当用户第一次打开小程序或更新的时候，Native会从腾讯的CDN下载小程序完整的package；小程序运行过程中与开发者服务器的通讯也同样被Native代理。示意图见下：
+小程序框架在微信客户端上由三部分组成：**View(视图层)**、**App Service(逻辑层)**和**Native(系统层)**。View和App Service构成了一个单向的数据绑定系统，在微信客户端内部通过Data和Event交互。App Service通过WeixinJSBridge与Native通讯以调用微信客户端的原生能力。小程序与外部服务的通讯全部由Native承担——当用户第一次打开小程序或更新的时候，Native会从腾讯的CDN下载小程序完整的package；小程序运行过程中与开发者服务器的进行通讯也同样由Native转发。示意图见下：
 
 ![Framework Overview]({{ site.url }}{{ site.baseurl }}/images/photo/weapp-develop/overview-1.jpg)
 
 参照下图，具体观其内部：
 
-* **View(视图层)**起到了浏览器的作用，来展示各个页面。
-* **App Service(逻辑层)**则承担了服务器的部分职责，提供本地存储，并支持离线功能：
+* **View(视图层)**起到了浏览器的作用，来展示小程序的各个页面。
+* **App Service(逻辑层)**承担了服务器的部分职责，提供本地存储，支持离线，内部由两块构成：
   - Manager负责管理数据、页面的生命周期、事件的分发、路由跳转。
-  - [API](https://mp.weixin.qq.com/debug/wxadoc/dev/api/)基于JSSDK演化而来，通过WeixinJSBridge调用系统层的原生能力。
+  - [API](https://mp.weixin.qq.com/debug/wxadoc/dev/api/)基于[微信JS-SDK](http://mp.weixin.qq.com/wiki/7/aaa137b55fb2e0456bf8dd9148dd613f.html)演化而来，通过WeixinJSBridge与系统层通讯，以调用微信客户端的原生能力。
 * **Native(系统层)**主要起到了桥梁的作用，视图层和逻辑层的交互以及对微信客户端原生能力的调用都是通过系统层进行连接。
 
 这是一个典型的[MVVM模式](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel)，其中App Service(逻辑层)作为*Model*向作为*View*的View(视图层)发送数据用于展示，而后者又将被触发的事件发送给前者，这一切都是通过作为*View Model*的Native(系统层)传递的。
